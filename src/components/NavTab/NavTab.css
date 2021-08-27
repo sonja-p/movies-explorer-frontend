@@ -1,0 +1,22 @@
+.navigation-tab {
+    min-height: 36px;
+    padding: 84px 70px 75px;
+    background-color: #DDDEE3;
+    text-align: start;
+}
+
+.navigation-tab__link {
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    color: #000000;
+    text-decoration: none;
+    border: 1px solid rgba(0, 0, 0, 0.6);
+    box-sizing: border-box;
+    border-radius: 3px;
+    padding: 10px 20px;
+}
+
+.navigation-tab__link:hover {
+    opacity: 0.6;
+}

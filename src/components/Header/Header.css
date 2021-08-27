@@ -1,0 +1,47 @@
+.header {
+    width: 100%;
+    min-height: 74px;
+    padding: 0px 70px;
+    box-sizing: border-box;
+    background-color: #DDDEE3;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header__login-link {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 8px 16px;
+    margin-left: 30px;
+    background-color: #3456F3;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+
+.header__login-link:hover {
+    opacity: 0.6;
+}
+
+.header__register-link {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    color: #000000;
+    text-decoration: none;
+}
+
+.header__register-link:hover {
+    opacity: 0.6;
+}
+
+.header__logo{
+    width: 38px;
+    height: 38px;
+}
