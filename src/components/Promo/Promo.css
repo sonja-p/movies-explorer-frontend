@@ -1,6 +1,12 @@
-.promo {
-  min-height: 304px;
+.promo__wrapper {
   background-color: #dddee3;
+}
+
+.promo {
+  width: 100%;
+  max-width: 1280px;
+  margin: auto;
+  min-height: 304px;
   display: flex;
   flex-direction: row;
   align-items: flex-start;

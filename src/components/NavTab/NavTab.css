@@ -1,6 +1,15 @@
-.navigation-tab {
+.nav-tab__wrapper {
+  width: 100%;
+  background-color: #dddee3;
+}
+
+.nav-tab {
+  width: 100%;
+  max-width: 1280px;
+  margin: auto;
+  box-sizing: border-box;
   min-height: 36px;
-  padding: 92px 70px 68px;
+  padding: 92px 70px 85px;
   background-color: #dddee3;
   text-align: start;
 }
@@ -17,6 +26,6 @@
   padding: 10px 19px;
 }
 
-.navigation-tab__link:hover {
+.nav-tab__link:hover {
   opacity: 0.6;
 }

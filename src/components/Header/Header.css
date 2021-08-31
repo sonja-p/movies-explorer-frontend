@@ -1,9 +1,14 @@
+.header__wrapper {
+  background-color: #dddee3;
+}
+
 .header {
+  max-width: 1280px;
   width: 100%;
+  margin: auto;
   min-height: 74px;
   padding: 0px 70px;
   box-sizing: border-box;
-  background-color: #dddee3;
   display: flex;
   flex-direction: row;
   align-items: center;
