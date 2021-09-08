@@ -6,22 +6,22 @@ function Portfolio() {
     <div className="portfolio">
       <h2 className="portfolio__title">Портфолио</h2>
       <ul className="portfolio__links">
-        <li className="portfolio__item">
+        <li className="portfolio__links-item">
+          <p className="portfolio__link-title">Статичный сайт</p>
           <a href="https://puolukka.nomoredomains.rocks" className="portfolio__link" target="_blank" rel="noreferrer">
-            <p className="portfolio__link-title">Статичный сайт</p>
-            <div className="portfolio__link-arrow" />
+            ↗
           </a>
         </li>
-        <li className="portfolio__item">
+        <li className="portfolio__links-item">
+          <p className="portfolio__link-title">Адаптивный сайт</p>
           <a href="https://puolukka.nomoredomains.rocks" className="portfolio__link" target="_blank" rel="noreferrer">
-            <p className="portfolio__link-title">Адаптивный сайт</p>
-            <div className="portfolio__link-arrow" />
+            ↗
           </a>
         </li>
-        <li className="portfolio__item">
+        <li className="portfolio__links-item">
+          <p className="portfolio__link-title">Одностраничное приложение</p>
           <a href="https://puolukka.nomoredomains.rocks" className="portfolio__link" target="_blank" rel="noreferrer">
-            <p className="portfolio__link-title">Одностраничное приложение</p>
-            <div className="portfolio__link-arrow" />
+            ↗
           </a>
         </li>
       </ul>

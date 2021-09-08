@@ -8,11 +8,21 @@
   margin: auto;
   min-height: 74px;
   padding: 0px 70px;
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
 .header__container {
@@ -30,11 +40,16 @@
   margin-left: 30px;
   background-color: #3456f3;
   border-radius: 3px;
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  cursor: pointer;
+  -webkit-transition: opacity 350ms ease;
+  -o-transition: opacity 350ms ease;
+  transition: opacity 350ms ease;
 }
 
 .header__login-link:hover {
-  opacity: 0.6;
+  opacity: 0.8;
 }
 
 .header__register-link {
@@ -44,13 +59,56 @@
   line-height: 16px;
   color: #000000;
   text-decoration: none;
+  cursor: pointer;
+  -webkit-transition: opacity 350ms ease;
+  -o-transition: opacity 350ms ease;
+  transition: opacity 350ms ease;
 }
 
 .header__register-link:hover {
-  opacity: 0.6;
+  opacity: 0.7;
 }
 
 .header__logo {
   width: 38px;
   height: 38px;
+}
+
+@media screen and (max-width: 768px) {
+  .header {
+    padding: 0px 30px;
+    min-height: 77px;
+  }
+
+  .header__container {
+    margin-top: -4px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .header__wrapper {
+    min-width: 320px;
+  }
+
+  .header {
+    min-width: 320px;
+    padding: 0px 14px;
+    min-height: 77px;
+  }
+
+  .header__container {
+    margin-top: -4px;
+  }
+
+  .header__login-link {
+    font-size: 10px;
+    line-height: 16px;
+    padding: 6px 12px;
+    margin-left: 14px;
+  }
+
+  .header__register-link {
+    font-size: 10px;
+    line-height: 16px;
+  }
 }
