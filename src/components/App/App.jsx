@@ -17,7 +17,9 @@ function App() {
     <div className="App">
       <Switch>
         <Route path="/movies">
-          <Movies />
+          <Movies
+            isLoading={false}
+          />
         </Route>
         <Route path="/saved-movies">
           <SavedMovies />

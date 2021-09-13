@@ -7,7 +7,17 @@
     }],
     "no-unused-expressions": ["error", { "allowTernary": true }],
     "linebreak-style": ["error", "windows"],
-    "class-methods-use-this": ["error", { "exceptMethods": ["_parseResponse", "_checkResponse" ] }]
+    "class-methods-use-this": ["error", { "exceptMethods": ["_parseResponse", "_checkResponse" ] }],
+    "jsx-a11y/label-has-associated-control": [ "error", {
+      "required": {
+        "some": [ "nesting", "id"  ]
+      }
+    }],
+    "jsx-a11y/label-has-for": [ "error", {
+      "required": {
+        "some": [ "nesting", "id"  ]
+      }
+    }]
   },
   "env": {
     "browser": true
