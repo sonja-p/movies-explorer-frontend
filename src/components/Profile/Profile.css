@@ -73,6 +73,12 @@
   margin: 7px;
 }
 
+.profile__button_type_disabled {
+  color: #a0a0a0;
+  pointer-events: none;
+  user-select: none;
+}
+
 .profile__button:first-of-type {
   margin-top: 186px;
 }

@@ -105,6 +105,13 @@
   opacity: 0.8;
 }
 
+.login__button_type_disabled {
+  background-color: #f8f8f8;
+  color: #c2c2c2;
+  pointer-events: none;
+  user-select: none;
+}
+
 .login__link-title {
   margin: 17px 3px;
   font-size: 14px;

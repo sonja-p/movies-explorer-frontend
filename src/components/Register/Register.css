@@ -105,6 +105,13 @@
   opacity: 0.8;
 }
 
+.register__button_type_disabled {
+  background-color: #f8f8f8;
+  color: #a0a0a0;
+  pointer-events: none;
+  user-select: none;
+}
+
 .register__link-title {
   margin: 17px 3px;
   font-size: 14px;
