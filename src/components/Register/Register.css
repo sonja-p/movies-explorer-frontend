@@ -13,8 +13,13 @@
 }
 
 .register__form {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 
 .register__input-title{
@@ -42,7 +47,8 @@
 
 .register__input:invalid {
   color: #EE3465;
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 
 .register__input:-moz-submit-invalid {
@@ -109,7 +115,10 @@
   background-color: #f8f8f8;
   color: #a0a0a0;
   pointer-events: none;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 
 .register__link-title {

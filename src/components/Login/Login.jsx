@@ -44,7 +44,7 @@ function Login() {
 
         <button
           type="submit"
-          className="login__button login__button_type_disabled"
+          className="login__button"
           onClick
         >
           Войти

@@ -58,7 +58,7 @@ function Register() {
 
         <button
           type="submit"
-          className="register__button"
+          className="register__button register__button_type_disabled"
           onClick
         >
           Зарегистрироваться
