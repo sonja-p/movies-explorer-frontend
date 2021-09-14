@@ -22,7 +22,9 @@ function App() {
           />
         </Route>
         <Route path="/saved-movies">
-          <SavedMovies />
+          <SavedMovies
+            isLoading={false}
+          />
         </Route>
         <Route path="/signup">
           <Register />

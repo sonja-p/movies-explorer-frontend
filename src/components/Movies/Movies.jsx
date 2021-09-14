@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Header from '../Header/Header';
 import SearchForm from '../SearchForm/SearchForm';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
-import Preloader from '../Preloader/Preloader';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 
 function Movies({ isLoading }) {
@@ -13,8 +12,7 @@ function Movies({ isLoading }) {
       <Header />
       <SearchForm />
       <FilterCheckbox isChecked />
-      {isLoading ? <Preloader /> : ''}
-      <MoviesCardList />
+      <MoviesCardList isLoading={isLoading} />
     </div>
   );
 }

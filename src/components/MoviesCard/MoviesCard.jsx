@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
+import { useRouteMatch } from 'react-router-dom';
 import './MoviesCard.css';
 import image from '../../images/movie-1.png';
 
 function MoviesCard() {
   const [isMovieSaved, setIsMovieSaved] = useState(false);
 
+  const isSavedMovies = useRouteMatch({ path: '/saved-movies', exact: true });
+  const isMovies = useRouteMatch({ path: '/movies', exact: true });
+
   function handleCardSave() {
     setIsMovieSaved(!isMovieSaved);
+  }
+
+  function handleCardDelete(evt) {
+    evt.target.closest('.movies-card').remove();
   }
 
   return (
@@ -20,7 +28,7 @@ function MoviesCard() {
         alt=""
         className="movies-card__image"
       />
-      {isMovieSaved ? (
+      {isMovies && (isMovieSaved ? (
         <button
           className="movies-card__button movies-card__button_type_saved"
           type="button"
@@ -35,6 +43,14 @@ function MoviesCard() {
         >
           Сохранить
         </button>
+      ))}
+      {isSavedMovies && (
+        <button
+          className="movies-card__button movies-card__button_type_delete"
+          type="button"
+          aria-label="Delete"
+          onClick={handleCardDelete}
+        />
       )}
     </li>
   );

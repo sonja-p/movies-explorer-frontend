@@ -84,6 +84,10 @@
   background-image: url("../../images/icon-movie-added.svg");
 }
 
+.movies-card__button_type_delete {
+  background-image: url("../../images/icon-movie-delete.svg");
+}
+
 @media screen and (max-width: 480px) {
   .movies-card__container {
     padding: 14px;
