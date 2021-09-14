@@ -87,19 +87,6 @@
   margin-bottom: -45px;
 }
 
-.register__login-link {
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 17px;
-  margin: 14px 0 14px 3px;
-  color: #3456f3;
-  text-decoration: none;
-}
-
-.register__login-link:hover {
-  opacity: 0.7;
-}
-
 .register__button {
   width: 100%;
   background-color: #3456f3;
@@ -130,7 +117,12 @@
   font-weight: 400;
   font-size: 14px;
   line-height: 17px;
-  color: #3456F3
+  color: #3456F3;
+  text-decoration: none;
+}
+
+.register__login-link:hover {
+  opacity: 0.7;
 }
 
 @media screen and (max-width: 768px) {

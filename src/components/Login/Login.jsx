@@ -49,9 +49,9 @@ function Login() {
         >
           Войти
         </button>
-        <div className="login__signin">
+        <div className="login__signup">
           <p className="login__link-title">Ещё не зарегистрированы?</p>
-          <Link to="signup" className="login__login-link">
+          <Link to="signup" className="login__register-link">
             Регистрация
           </Link>
         </div>
