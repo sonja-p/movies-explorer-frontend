@@ -5,6 +5,7 @@ import Header from '../Header/Header';
 import SearchForm from '../SearchForm/SearchForm';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
+import Footer from '../Footer/Footer';
 
 function Movies({ isLoading }) {
   return (
@@ -13,6 +14,7 @@ function Movies({ isLoading }) {
       <SearchForm />
       <FilterCheckbox isChecked />
       <MoviesCardList isLoading={isLoading} />
+      <Footer />
     </div>
   );
 }

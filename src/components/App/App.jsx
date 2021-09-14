@@ -5,7 +5,6 @@ import {
   Route, Switch,
 } from 'react-router-dom';
 import Main from '../Main/Main';
-import Footer from '../Footer/Footer';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import Register from '../Register/Register';
@@ -39,7 +38,6 @@ function App() {
           <Main />
         </Route>
       </Switch>
-      <Footer />
     </div>
   );
 }

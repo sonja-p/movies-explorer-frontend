@@ -8,13 +8,13 @@ function Portfolio() {
       <ul className="portfolio__links">
         <li className="portfolio__links-item">
           <p className="portfolio__link-title">Статичный сайт</p>
-          <a href="https://puolukka.nomoredomains.rocks" className="portfolio__link" target="_blank" rel="noreferrer">
+          <a href="/movies" className="portfolio__link" rel="noreferrer">
             ↗
           </a>
         </li>
         <li className="portfolio__links-item">
           <p className="portfolio__link-title">Адаптивный сайт</p>
-          <a href="https://puolukka.nomoredomains.rocks" className="portfolio__link" target="_blank" rel="noreferrer">
+          <a href="/movies" className="portfolio__link" rel="noreferrer">
             ↗
           </a>
         </li>
