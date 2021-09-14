@@ -16,7 +16,7 @@ function Header() {
               <img src={logo} alt="Логотип" className="header__logo" />
             </Link>
             <nav className="header__container">
-              <Link to="signup" className="header__link">Регистрация</Link>
+              <Link to="signup" className="header__link header__register-link">Регистрация</Link>
               <Link to="signin" className="header__login-link">Войти</Link>
             </nav>
           </header>

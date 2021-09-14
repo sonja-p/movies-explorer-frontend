@@ -18,13 +18,21 @@ Portfolio — компонент со ссылками на другие про�
 */
 
 function Main() {
+  const ref = React.createRef();
+
+  const scrollTo = () => {
+    ref.current.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <>
       <Header />
       <main className="main">
         <Promo />
-        <NavTab />
-        <AboutProject />
+        <NavTab>
+          <button onClick={() => scrollTo()} type="button" className="nav-tab__link">Узнать больше</button>
+        </NavTab>
+        <AboutProject ref={ref} />
         <Techs />
         <AboutMe />
         <Portfolio />

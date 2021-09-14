@@ -36,7 +36,7 @@
   line-height: 16px;
   color: #ffffff;
   text-decoration: none;
-  padding: 8px 20px;
+  padding: 9px 20px;
   margin-left: 14px;
   background-color: #3456f3;
   border-radius: 3px;
@@ -108,11 +108,12 @@
   .header__login-link {
     font-size: 10px;
     line-height: 16px;
-    padding: 6px 12px;
-    margin-left: 14px;
+    padding: 7px 12px;
+    margin-left: -3px;
   }
 
   .header__register-link {
+    font-weight: 500;
     font-size: 10px;
     line-height: 16px;
   }

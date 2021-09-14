@@ -10,7 +10,7 @@
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   min-height: 36px;
-  padding: 92px 70px 85px;
+  padding: 84px 70px 74px;
   background-color: #dddee3;
   text-align: start;
 }
@@ -38,7 +38,7 @@
 
 @media screen and (max-width: 768px) {
   .nav-tab {
-    padding: 99px 30px 85px;
+    padding: 91px 30px 73px;
     text-align: center;
   }
 }
@@ -49,6 +49,6 @@
   }
 
   .nav-tab {
-    padding: 87px 10px 39px;
+    padding: 79px 10px 27px;
   }
 }
