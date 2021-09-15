@@ -135,6 +135,10 @@
   line-height: 17px;
   color: #3456F3;
   text-decoration: none;
+  cursor: pointer;
+  -webkit-transition: opacity 350ms ease;
+  -o-transition: opacity 350ms ease;
+  transition: opacity 350ms ease;
 }
 
 .login__register-link:hover {
