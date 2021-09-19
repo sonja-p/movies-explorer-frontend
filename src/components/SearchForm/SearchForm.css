@@ -27,11 +27,16 @@
   background-color: inherit;
 }
 
-.popup__input::-webkit-input-placeholder {
+.search-form__input:focus {
+  outline: none;
+}
+
+
+.search-form__input::-webkit-input-placeholder {
   color: #a0a0a0;
 }
 
-.popup__input::-moz-placeholder {
+.search-form::-moz-placeholder {
   color: #a0a0a0;
 }
 
@@ -50,6 +55,16 @@
   position: fixed;
   top: 0;
   right: 0;
+}
+
+.search-form__button_disabled {
+  background-color: #f8f8f8;
+  color: #c2c2c2;
+  pointer-events: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 
 @media screen and (max-width: 768px) {

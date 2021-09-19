@@ -25,7 +25,7 @@ function MoviesCard() {
       </div>
       <img
         src={image}
-        alt=""
+        alt="Обложка фильма"
         className="movies-card__image"
       />
       {isMovies && (isMovieSaved ? (
