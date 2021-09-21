@@ -8,7 +8,7 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
 
 function Movies({
-  isLoading, findMovies, moviesCards, message,
+  isLoading, findMovies, moviesCards, message, windowWidth,
 }) {
   return (
     <div className="movies">
@@ -19,6 +19,7 @@ function Movies({
         isLoading={isLoading}
         moviesCards={moviesCards}
         message={message}
+        windowWidth={windowWidth}
       />
       <Footer />
     </div>
@@ -30,6 +31,7 @@ Movies.propTypes = {
   findMovies: PropTypes.func.isRequired,
   moviesCards: PropTypes.arrayOf(PropTypes.object).isRequired,
   message: PropTypes.string.isRequired,
+  windowWidth: PropTypes.number.isRequired,
 };
 
 export default Movies;

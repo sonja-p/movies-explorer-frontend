@@ -90,7 +90,9 @@
 @media screen and (max-width: 480px) {
   .movies-card__container {
     padding: 14px;
+    height: 46px;
   }
+
   .movies-card__title {
     font-weight: 500;
     font-size: 12px;
@@ -100,6 +102,10 @@
   .movies-card__duration {
     font-size: 10px;
     line-height: 18px;
+  }
+
+  .movies-card__image {
+    height: 168px;
   }
 
   .movies-card__button {

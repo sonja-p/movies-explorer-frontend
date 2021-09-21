@@ -15,13 +15,24 @@ import Login from '../Login/Login';
 import Profile from '../Profile/Profile';
 import Error from '../Error/Error';
 import MoviesApi from '../../utils/MoviesApi';
+import throttle from '../../utils/throttle';
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
-
   const [message, setMessage] = useState('');
-
   const [moviesCards, setMoviesCards] = useState([]);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const callback = throttle(() => {
+      setWindowWidth(window.innerWidth);
+    }, 1000);
+
+    window.addEventListener('resize', callback);
+    return () => {
+      window.removeEventListener('resize', callback);
+    };
+  }, []);
 
   useEffect(() => {
     const localMovies = JSON.parse(localStorage.getItem('movies'));
@@ -59,6 +70,7 @@ function App() {
             findMovies={findMovies}
             moviesCards={moviesCards}
             message={message}
+            windowWidth={windowWidth}
           />
         </Route>
         <Route path="/saved-movies">
