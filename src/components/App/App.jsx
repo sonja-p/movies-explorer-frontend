@@ -1,5 +1,8 @@
 import './App.css';
-import React, { useState } from 'react';
+import React, {
+  useState,
+  useEffect,
+} from 'react';
 
 import {
   Route, Switch,
@@ -18,14 +21,19 @@ function App() {
 
   const [moviesCards, setMoviesCards] = useState([]);
 
+  useEffect(() => {
+    const localMovies = JSON.parse(localStorage.getItem('movies'));
+    return setMoviesCards(localMovies);
+  }, []);
+
   const findMovies = (name) => {
     setIsLoading(true);
     MoviesApi
       .getMovies()
       .then((data) => {
-        setMoviesCards(() => data.filter(
-          (c) => c.nameRU.toLowerCase().includes(name.toLowerCase()),
-        ));
+        const movies = data.filter((c) => c.nameRU.toLowerCase().includes(name.toLowerCase()));
+        setMoviesCards(movies);
+        localStorage.setItem('movies', JSON.stringify(movies));
       })
       .catch((err) => {
         // eslint-disable-next-line no-console

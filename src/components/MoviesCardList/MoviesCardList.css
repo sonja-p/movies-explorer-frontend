@@ -31,6 +31,17 @@
   cursor: pointer;
 }
 
+.movies-cardlist__message {
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 13px;
+  text-align: center;
+  color: #FF004C;
+  position: relative;
+  top: 50%;
+  left: calc((100% - 106px) / 2);
+}
+
 @media screen and (max-width: 768px) {
   .movies-cardlist {
     padding: 129px 30px 0;

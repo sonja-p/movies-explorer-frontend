@@ -16,32 +16,38 @@ function MoviesCardList({ isLoading, moviesCards }) {
 
   return (
     <section className="movies-cardlist">
-      {isLoading ? <Preloader />
+      { isLoading ? <Preloader />
         : (
-          <ul className="movies-cardlist__list">
-            {
-              moviesCards.map((card) => (
-                <MoviesCard
-                  key={card.id}
-                  // eslint-disable-next-line react/jsx-props-no-spreading
-                  {...card}
-                  // onCardClick={onCardClick}
-                  // onCardLike={onCardLike}
-                  // onCardDelete={onCardDelete}
-                />
-              ))
-            }
-          </ul>
+          <>
+            { moviesCards.length === 0 ? moviesCards.length === 0 && (
+              <span className="movies-cardlist__message">Ничего не найдено</span>) : (
+                <>
+                  <ul className="movies-cardlist__list">
+                    {
+                    moviesCards.map((card) => (
+                      <MoviesCard
+                        key={card.id}
+                        // eslint-disable-next-line react/jsx-props-no-spreading
+                        {...card}
+                        // onCardClick={onCardClick}
+                        // onCardLike={onCardLike}
+                        // onCardDelete={onCardDelete}
+                      />
+                    ))
+                  }
+                  </ul>
+                  <button
+                    className="movies-cardlist__button"
+                    type="button"
+                    onClick={handleClick}
+                  >
+                    Ещё
+                  </button>
+                </>
+            )}
+          </>
         )}
-      <button
-        className="movies-cardlist__button"
-        type="button"
-        onClick={handleClick}
-      >
-        Ещё
-      </button>
     </section>
-
   );
 }
 
