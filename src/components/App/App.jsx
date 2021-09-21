@@ -19,6 +19,8 @@ import MoviesApi from '../../utils/MoviesApi';
 function App() {
   const [isLoading, setIsLoading] = useState(false);
 
+  const [message, setMessage] = useState('');
+
   const [moviesCards, setMoviesCards] = useState([]);
 
   useEffect(() => {
@@ -32,12 +34,18 @@ function App() {
       .getMovies()
       .then((data) => {
         const movies = data.filter((c) => c.nameRU.toLowerCase().includes(name.toLowerCase()));
-        setMoviesCards(movies);
-        localStorage.setItem('movies', JSON.stringify(movies));
+        if (movies.length === 0) {
+          setMessage('Ничего не найдено');
+        } else {
+          setMessage('');
+          setMoviesCards(movies);
+          localStorage.setItem('movies', JSON.stringify(movies));
+        }
       })
       .catch((err) => {
         // eslint-disable-next-line no-console
         console.log('Ошибка при поиске фильма', err.message);
+        setMessage('Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз');
       })
       .finally(() => setIsLoading(false));
   };
@@ -50,6 +58,7 @@ function App() {
             isLoading={isLoading}
             findMovies={findMovies}
             moviesCards={moviesCards}
+            message={message}
           />
         </Route>
         <Route path="/saved-movies">

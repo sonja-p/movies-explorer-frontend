@@ -8,7 +8,7 @@ import Preloader from '../Preloader/Preloader';
 // на 768 - 8 карточек (4 ряда по 2 карточки)
 // на 320 - 5 карточек по 1
 
-function MoviesCardList({ isLoading, moviesCards }) {
+function MoviesCardList({ isLoading, moviesCards, message }) {
   const handleClick = () => {
     // eslint-disable-next-line no-console
     console.log('Something else..');
@@ -19,22 +19,22 @@ function MoviesCardList({ isLoading, moviesCards }) {
       { isLoading ? <Preloader />
         : (
           <>
-            { moviesCards.length === 0 ? moviesCards.length === 0 && (
-              <span className="movies-cardlist__message">Ничего не найдено</span>) : (
+            { message ? (
+              <span className="movies-cardlist__message">{message}</span>) : (
                 <>
                   <ul className="movies-cardlist__list">
                     {
-                    moviesCards.map((card) => (
-                      <MoviesCard
-                        key={card.id}
-                        // eslint-disable-next-line react/jsx-props-no-spreading
-                        {...card}
-                        // onCardClick={onCardClick}
-                        // onCardLike={onCardLike}
-                        // onCardDelete={onCardDelete}
-                      />
-                    ))
-                  }
+                moviesCards.map((card) => (
+                  <MoviesCard
+                    key={card.id}
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    {...card}
+                    // onCardClick={onCardClick}
+                    // onCardLike={onCardLike}
+                    // onCardDelete={onCardDelete}
+                  />
+                ))
+              }
                   </ul>
                   <button
                     className="movies-cardlist__button"
@@ -49,11 +49,13 @@ function MoviesCardList({ isLoading, moviesCards }) {
         )}
     </section>
   );
+/* <span className="movies-cardlist__message">{message}</span> */
 }
 
 MoviesCardList.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   moviesCards: PropTypes.arrayOf(PropTypes.object).isRequired,
+  message: PropTypes.string.isRequired,
 };
 
 export default MoviesCardList;
