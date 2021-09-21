@@ -12,7 +12,7 @@ import Preloader from '../Preloader/Preloader';
 // Ширина от 320px до 480px — 5 карточек по 1 в ряд. Кнопка «Ещё» загружает по 2 карточки.
 
 function MoviesCardList({
-  isLoading, moviesCards, message, windowWidth,
+  isLoading, moviesCards, message, windowWidth, onCardLike, onCardDelete, isMovieSaved,
 }) {
   const [cardsCount, setCardsCount] = useState(0);
 
@@ -52,8 +52,9 @@ function MoviesCardList({
                           // eslint-disable-next-line react/jsx-props-no-spreading
                           {...card}
                           // onCardClick={onCardClick}
-                          // onCardLike={onCardLike}
-                          // onCardDelete={onCardDelete}
+                          onCardLike={onCardLike}
+                          onCardDelete={onCardDelete}
+                          isMovieSaved={isMovieSaved}
                         />
                       ))
                     }
@@ -80,6 +81,9 @@ MoviesCardList.propTypes = {
   moviesCards: PropTypes.arrayOf(PropTypes.object).isRequired,
   message: PropTypes.string.isRequired,
   windowWidth: PropTypes.number.isRequired,
+  onCardLike: PropTypes.func.isRequired,
+  onCardDelete: PropTypes.func.isRequired,
+  isMovieSaved: PropTypes.bool.isRequired,
 };
 
 export default MoviesCardList;

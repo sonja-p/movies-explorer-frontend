@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import './MoviesCard.css';
@@ -6,21 +6,20 @@ import './MoviesCard.css';
 function MoviesCard(props) {
   const url = 'https://api.nomoreparties.co';
   const {
-    nameRU, image, duration,
+    nameRU, image, duration, onCardLike, onCardDelete, isMovieSaved,
     // trailer,
   } = props;
-  const [isMovieSaved, setIsMovieSaved] = useState(false);
 
   const isSavedMovies = useRouteMatch({ path: '/saved-movies', exact: true });
   const isMovies = useRouteMatch({ path: '/movies', exact: true });
 
-  function handleCardSave() {
-    setIsMovieSaved(!isMovieSaved);
-  }
+  // function handleCardSave() {
+  //   setIsMovieSaved(!isMovieSaved);
+  // }
 
-  function handleCardDelete(evt) {
-    evt.target.closest('.movies-card').remove();
-  }
+  // function handleCardDelete(evt) {
+  //   evt.target.closest('.movies-card').remove();
+  // }
 
   function addMinutes(n) {
     let minutes;
@@ -52,13 +51,13 @@ function MoviesCard(props) {
           className="movies-card__button movies-card__button_type_saved"
           type="button"
           aria-label="Save"
-          onClick={handleCardSave}
+          onClick={onCardDelete}
         />
       ) : (
         <button
           className="movies-card__button"
           type="button"
-          onClick={handleCardSave}
+          onClick={onCardLike}
         >
           Сохранить
         </button>
@@ -68,7 +67,7 @@ function MoviesCard(props) {
           className="movies-card__button movies-card__button_type_delete"
           type="button"
           aria-label="Delete"
-          onClick={handleCardDelete}
+          onClick={onCardDelete}
         />
       )}
     </li>
@@ -83,6 +82,9 @@ MoviesCard.propTypes = {
   }).isRequired,
   // trailer: PropTypes.string.isRequired,
   duration: PropTypes.number.isRequired,
+  onCardLike: PropTypes.func.isRequired,
+  onCardDelete: PropTypes.func.isRequired,
+  isMovieSaved: PropTypes.bool.isRequired,
 };
 
 export default MoviesCard;

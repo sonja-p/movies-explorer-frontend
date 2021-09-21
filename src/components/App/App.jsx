@@ -15,6 +15,7 @@ import Login from '../Login/Login';
 import Profile from '../Profile/Profile';
 import Error from '../Error/Error';
 import MoviesApi from '../../utils/MoviesApi';
+import MainApi from '../../utils/MainApi';
 import throttle from '../../utils/throttle';
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
   const [message, setMessage] = useState('');
   const [moviesCards, setMoviesCards] = useState([]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [isMovieSaved, setIsMovieSaved] = useState(false);
 
   useEffect(() => {
     const callback = throttle(() => {
@@ -36,7 +38,9 @@ function App() {
 
   useEffect(() => {
     const localMovies = JSON.parse(localStorage.getItem('movies'));
-    return setMoviesCards(localMovies);
+    if (localMovies !== null) {
+      setMoviesCards(localMovies);
+    }
   }, []);
 
   const findMovies = (name) => {
@@ -61,6 +65,34 @@ function App() {
       .finally(() => setIsLoading(false));
   };
 
+  const handleLike = () => {
+    MainApi
+      .saveMovie()
+      .then((data) => {
+        // eslint-disable-next-line no-console
+        console.log(data);
+        setIsMovieSaved(true);
+      })
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.log('Ошибка при сохранении фильма', err.message);
+      });
+  };
+
+  const handleDelete = () => {
+    MainApi
+      .deleteMovie()
+      .then((data) => {
+        // eslint-disable-next-line no-console
+        console.log(data);
+        setIsMovieSaved(false);
+      })
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.log('Ошибка при удалении фильма', err.message);
+      });
+  };
+
   return (
     <div className="App">
       <Switch>
@@ -71,6 +103,9 @@ function App() {
             moviesCards={moviesCards}
             message={message}
             windowWidth={windowWidth}
+            onCardLike={handleLike}
+            onCardDelete={handleDelete}
+            isMovieSaved={isMovieSaved}
           />
         </Route>
         <Route path="/saved-movies">
