@@ -7,13 +7,16 @@ import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
 
-function Movies({ isLoading }) {
+function Movies({ isLoading, findMovies, moviesCards }) {
   return (
     <div className="movies">
       <Header />
-      <SearchForm />
+      <SearchForm findMovies={findMovies} isLoading={isLoading} />
       <FilterCheckbox isChecked />
-      <MoviesCardList isLoading={isLoading} />
+      <MoviesCardList
+        isLoading={isLoading}
+        moviesCards={moviesCards}
+      />
       <Footer />
     </div>
   );
@@ -21,6 +24,8 @@ function Movies({ isLoading }) {
 
 Movies.propTypes = {
   isLoading: PropTypes.bool.isRequired,
+  findMovies: PropTypes.func.isRequired,
+  moviesCards: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default Movies;

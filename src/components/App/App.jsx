@@ -1,5 +1,5 @@
 import './App.css';
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   Route, Switch,
@@ -11,14 +11,37 @@ import Register from '../Register/Register';
 import Login from '../Login/Login';
 import Profile from '../Profile/Profile';
 import Error from '../Error/Error';
+import MoviesApi from '../../utils/MoviesApi';
 
 function App() {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [moviesCards, setMoviesCards] = useState([]);
+
+  const findMovies = (name) => {
+    setIsLoading(true);
+    MoviesApi
+      .getMovies()
+      .then((data) => {
+        setMoviesCards(() => data.filter(
+          (c) => c.nameRU.toLowerCase().includes(name.toLowerCase()),
+        ));
+      })
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.log('Ошибка при поиске фильма', err.message);
+      })
+      .finally(() => setIsLoading(false));
+  };
+
   return (
     <div className="App">
       <Switch>
         <Route path="/movies">
           <Movies
-            isLoading={false}
+            isLoading={isLoading}
+            findMovies={findMovies}
+            moviesCards={moviesCards}
           />
         </Route>
         <Route path="/saved-movies">

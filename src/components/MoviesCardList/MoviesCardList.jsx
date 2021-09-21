@@ -8,26 +8,35 @@ import Preloader from '../Preloader/Preloader';
 // на 768 - 8 карточек (4 ряда по 2 карточки)
 // на 320 - 5 карточек по 1
 
-function MoviesCardList({ isLoading }) {
+function MoviesCardList({ isLoading, moviesCards }) {
+  const handleClick = () => {
+    // eslint-disable-next-line no-console
+    console.log('Something else..');
+  };
+
   return (
     <section className="movies-cardlist">
       {isLoading ? <Preloader />
         : (
           <ul className="movies-cardlist__list">
-            <MoviesCard />
-            <MoviesCard />
-            <MoviesCard />
-            <MoviesCard />
-            <MoviesCard />
-            <MoviesCard />
-            <MoviesCard />
-            <MoviesCard />
+            {
+              moviesCards.map((card) => (
+                <MoviesCard
+                  key={card.id}
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...card}
+                  // onCardClick={onCardClick}
+                  // onCardLike={onCardLike}
+                  // onCardDelete={onCardDelete}
+                />
+              ))
+            }
           </ul>
         )}
       <button
         className="movies-cardlist__button"
         type="button"
-        onClick
+        onClick={handleClick}
       >
         Ещё
       </button>
@@ -38,6 +47,7 @@ function MoviesCardList({ isLoading }) {
 
 MoviesCardList.propTypes = {
   isLoading: PropTypes.bool.isRequired,
+  moviesCards: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default MoviesCardList;

@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import { useRouteMatch } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import './MoviesCard.css';
-import image from '../../images/movie-1.png';
 
-function MoviesCard() {
+function MoviesCard(props) {
+  const url = 'https://api.nomoreparties.co';
+  const {
+    nameRU, image, duration,
+    // trailer,
+  } = props;
   const [isMovieSaved, setIsMovieSaved] = useState(false);
 
   const isSavedMovies = useRouteMatch({ path: '/saved-movies', exact: true });
@@ -17,14 +22,28 @@ function MoviesCard() {
     evt.target.closest('.movies-card').remove();
   }
 
+  function addMinutes(n) {
+    let minutes;
+    if (n % 10 >= 2 && n % 10 <= 4) {
+      minutes = 'минуты';
+    } else if (n % 10 === 1) {
+      minutes = 'минута';
+    } else {
+      minutes = 'минут';
+    }
+    return minutes;
+  }
+
   return (
     <li className="movies-card">
       <div className="movies-card__container">
-        <h3 className="movies-card__title">В погоне за Бенкси</h3>
-        <span className="movies-card__duration">27 минут</span>
+        <h3 className="movies-card__title">{nameRU}</h3>
+        <span className="movies-card__duration">
+          {`${duration} ${addMinutes(duration)}`}
+        </span>
       </div>
       <img
-        src={image}
+        src={`${url}${image.url}`}
         alt="Обложка фильма"
         className="movies-card__image"
       />
@@ -55,5 +74,15 @@ function MoviesCard() {
     </li>
   );
 }
+
+MoviesCard.propTypes = {
+  nameRU: PropTypes.string.isRequired,
+  image: PropTypes.shape({
+    url: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
+  }).isRequired,
+  // trailer: PropTypes.string.isRequired,
+  duration: PropTypes.number.isRequired,
+};
 
 export default MoviesCard;
