@@ -1,10 +1,28 @@
-import React from 'react';
-import './Register.css';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import './Register.css';
 import logo from '../../images/header-logo.svg';
+import { useFormWithValidation } from '../../hooks/useForm';
 
-function Register() {
-  const error = 'Что-то пошло не так...';
+function Register({ handleRegister, isSending, message }) {
+  const {
+    values,
+    handleChange,
+    resetForm,
+    errors,
+    isValid,
+  } = useFormWithValidation();
+
+  useEffect(() => {
+    resetForm({});
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const { name, password, email } = values;
+    handleRegister({ name, password, email });
+  };
 
   return (
     <div className="register">
@@ -14,54 +32,57 @@ function Register() {
       <h2 className="register__title">Добро пожаловать!</h2>
       <form
         className="register__form"
-        onSubmit
+        onSubmit={handleSubmit}
       >
         <span className="register__input-title">Имя</span>
         <input
           className="register__input"
-          onChange
+          onChange={handleChange}
           id="name"
           name="name"
           type="text"
-          value="Виталий"
+          pattern="^[А-Яа-яЁёA-Za-z]+-? ?[А-Яа-яЁёA-Za-z]+$"
+          value={values.name || ''}
           minLength="2"
           maxLength="20"
           required
         />
-        <span className="register__input-error" id="name-error">{error}</span>
+        <span className="register__input-error" id="name-error">{errors.name}</span>
 
         <span className="register__input-title">E-mail</span>
         <input
           className="register__input"
-          onChange
+          onChange={handleChange}
           id="email"
           name="email"
           type="email"
-          value="pochta@yandex.ru"
+          value={values.email || ''}
           required
         />
-        <span className="register__input-error" id="email-error">{error}</span>
+        <span className="register__input-error" id="email-error">{errors.email}</span>
 
         <span className="register__input-title">Пароль</span>
         <input
           className="register__input"
+          onChange={handleChange}
           id="password"
           name="password"
           type="password"
-          placeholder="Пароль"
-          onChange
-          value="••••••••••••••"
+          value={values.password || ''}
           autoComplete="on"
           required
         />
-        <span className="register__input-error register__input-error_visible" id="password-error">{error}</span>
+        <span className="register__input-error" id="password-error">{errors.password}</span>
+
+        {message && <span className="register__input-error" id="message">{message}</span>}
 
         <button
           type="submit"
-          className="register__button register__button_type_disabled"
-          onClick
+          className={`register__button
+            ${!isValid && 'register__button_disabled'}
+            ${isSending && 'register__button_disabled'}`}
         >
-          Зарегистрироваться
+          {isSending ? 'Регистрация...' : 'Зарегистрироваться'}
         </button>
         <div className="register__signin">
           <p className="register__link-title">Уже зарегистрированы?</p>
@@ -73,5 +94,11 @@ function Register() {
     </div>
   );
 }
+
+Register.propTypes = {
+  handleRegister: PropTypes.func.isRequired,
+  isSending: PropTypes.bool.isRequired,
+  message: PropTypes.string.isRequired,
+};
 
 export default Register;

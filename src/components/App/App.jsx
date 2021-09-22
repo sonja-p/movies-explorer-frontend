@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import './App.css';
 import React, {
   useState,
@@ -5,7 +6,7 @@ import React, {
 } from 'react';
 
 import {
-  Route, Switch,
+  Route, Switch, useHistory,
 } from 'react-router-dom';
 import Main from '../Main/Main';
 import Movies from '../Movies/Movies';
@@ -17,14 +18,28 @@ import Error from '../Error/Error';
 import MoviesApi from '../../utils/MoviesApi';
 import MainApi from '../../utils/MainApi';
 import throttle from '../../utils/throttle';
+import auth from '../../utils/auth';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
 
 function App() {
+  const [currentUser, setCurrentUser] = useState({
+    name: '',
+    email: '',
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [moviesCards, setMoviesCards] = useState([]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [isMovieSaved, setIsMovieSaved] = useState(false);
+  const [isFormSending, setIsFormSending] = useState(false);
 
+  const history = useHistory();
+
+  const handleError = (error) => {
+    console.error(error);
+  };
+
+  // перенести в cardlist
   useEffect(() => {
     const callback = throttle(() => {
       setWindowWidth(window.innerWidth);
@@ -58,7 +73,6 @@ function App() {
         }
       })
       .catch((err) => {
-        // eslint-disable-next-line no-console
         console.log('Ошибка при поиске фильма', err.message);
         setMessage('Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз');
       })
@@ -69,12 +83,10 @@ function App() {
     MainApi
       .saveMovie()
       .then((data) => {
-        // eslint-disable-next-line no-console
         console.log(data);
         setIsMovieSaved(true);
       })
       .catch((err) => {
-        // eslint-disable-next-line no-console
         console.log('Ошибка при сохранении фильма', err.message);
       });
   };
@@ -83,53 +95,75 @@ function App() {
     MainApi
       .deleteMovie()
       .then((data) => {
-        // eslint-disable-next-line no-console
         console.log(data);
         setIsMovieSaved(false);
       })
       .catch((err) => {
-        // eslint-disable-next-line no-console
         console.log('Ошибка при удалении фильма', err.message);
       });
   };
 
+  const handleRegister = ({ name, password, email }) => {
+    setIsFormSending(true);
+    auth
+      .register(name, password, email)
+      .then((user) => {
+        setCurrentUser(user);
+        console.log('Регистрация прошла успешно', user);
+      })
+      .then(() => history.push('/movies'))
+      .catch((err) => {
+        handleError(err);
+        if (err) {
+          setMessage('Что-то пошло не так...');
+        }
+      })
+      .finally(() => setIsFormSending(false));
+  };
+
   return (
-    <div className="App">
-      <Switch>
-        <Route path="/movies">
-          <Movies
-            isLoading={isLoading}
-            findMovies={findMovies}
-            moviesCards={moviesCards}
-            message={message}
-            windowWidth={windowWidth}
-            onCardLike={handleLike}
-            onCardDelete={handleDelete}
-            isMovieSaved={isMovieSaved}
-          />
-        </Route>
-        <Route path="/saved-movies">
-          <SavedMovies
-            isLoading={false}
-          />
-        </Route>
-        <Route path="/signup">
-          <Register />
-        </Route>
-        <Route path="/signin">
-          <Login />
-        </Route>
-        <Route path="/profile">
-          <Profile />
-        </Route>
-        <Route path="/404">
-          <Error />
-        </Route>
-        <Route path="/">
-          <Main />
-        </Route>
-      </Switch>
-    </div>
+    <CurrentUserContext.Provider value={currentUser}>
+      <div className="App">
+        <Switch>
+          <Route path="/movies">
+            <Movies
+              isLoading={isLoading}
+              findMovies={findMovies}
+              moviesCards={moviesCards}
+              message={message}
+              windowWidth={windowWidth}
+              onCardLike={handleLike}
+              onCardDelete={handleDelete}
+              isMovieSaved={isMovieSaved}
+            />
+          </Route>
+          <Route path="/saved-movies">
+            <SavedMovies
+              isLoading={false}
+            />
+          </Route>
+          <Route path="/signup">
+            <Register
+              handleRegister={handleRegister}
+              isSending={isFormSending}
+              message={message}
+            />
+          </Route>
+          <Route path="/signin">
+            <Login />
+          </Route>
+          <Route path="/profile">
+            <Profile />
+          </Route>
+          <Route path="/404">
+            <Error />
+          </Route>
+          <Route path="/">
+            <Main />
+          </Route>
+        </Switch>
+      </div>
+    </CurrentUserContext.Provider>
   );
 }
 
