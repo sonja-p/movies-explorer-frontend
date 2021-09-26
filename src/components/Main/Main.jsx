@@ -1,5 +1,6 @@
 import React from 'react';
 import './Main.css';
+import PropTypes from 'prop-types';
 import Header from '../Header/Header';
 import Promo from '../Promo/Promo';
 import NavTab from '../NavTab/NavTab';
@@ -18,7 +19,7 @@ AboutMe — компонент с информацией о студенте.
 Portfolio — компонент со ссылками на другие проекты.
 */
 
-function Main() {
+function Main({ loggedIn }) {
   const ref = React.createRef();
 
   const scrollTo = () => {
@@ -27,7 +28,7 @@ function Main() {
 
   return (
     <>
-      <Header />
+      <Header loggedIn={loggedIn} />
       <main className="main">
         <Promo />
         <NavTab>
@@ -42,5 +43,9 @@ function Main() {
     </>
   );
 }
+
+Main.propTypes = {
+  loggedIn: PropTypes.bool.isRequired,
+};
 
 export default Main;

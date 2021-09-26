@@ -108,7 +108,7 @@
 
 .register__button_disabled {
   background-color: #f8f8f8;
-  color: #a0a0a0;
+  color: #c2c2c2;
   pointer-events: none;
   -webkit-user-select: none;
      -moz-user-select: none;

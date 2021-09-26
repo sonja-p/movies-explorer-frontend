@@ -82,9 +82,13 @@ MoviesCard.propTypes = {
   }).isRequired,
   // trailer: PropTypes.string.isRequired,
   duration: PropTypes.number.isRequired,
-  onCardLike: PropTypes.func.isRequired,
+  onCardLike: PropTypes.func,
   onCardDelete: PropTypes.func.isRequired,
   isMovieSaved: PropTypes.bool.isRequired,
+};
+
+MoviesCard.defaultProps = {
+  onCardLike: undefined,
 };
 
 export default MoviesCard;

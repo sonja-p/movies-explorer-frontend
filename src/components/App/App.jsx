@@ -6,7 +6,7 @@ import React, {
 } from 'react';
 
 import {
-  Route, Switch, useHistory,
+  Route, Switch, Redirect, useHistory, useLocation,
 } from 'react-router-dom';
 import Main from '../Main/Main';
 import Movies from '../Movies/Movies';
@@ -17,9 +17,9 @@ import Profile from '../Profile/Profile';
 import Error from '../Error/Error';
 import MoviesApi from '../../utils/MoviesApi';
 import MainApi from '../../utils/MainApi';
-import throttle from '../../utils/throttle';
 import auth from '../../utils/auth';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
 function App() {
   const [currentUser, setCurrentUser] = useState({
@@ -27,35 +27,60 @@ function App() {
     email: '',
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState('');
+  const [messages, setMessages] = useState({
+    regForm: null,
+    authForm: null,
+    profileForm: null,
+    searchForm: null,
+    auth: null,
+  });
   const [moviesCards, setMoviesCards] = useState([]);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [isMovieSaved, setIsMovieSaved] = useState(false);
   const [isFormSending, setIsFormSending] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const history = useHistory();
+  const location = useLocation();
 
   const handleError = (error) => {
     console.error(error);
   };
-
-  // перенести в cardlist
-  useEffect(() => {
-    const callback = throttle(() => {
-      setWindowWidth(window.innerWidth);
-    }, 1000);
-
-    window.addEventListener('resize', callback);
-    return () => {
-      window.removeEventListener('resize', callback);
-    };
-  }, []);
 
   useEffect(() => {
     const localMovies = JSON.parse(localStorage.getItem('movies'));
     if (localMovies !== null) {
       setMoviesCards(localMovies);
     }
+  }, []);
+
+  useEffect(() => {
+    MainApi
+      .getUserInfo()
+      .then((user) => {
+        setCurrentUser(user);
+        setLoggedIn(true);
+        history.push(location.pathname);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setMessages({
+          regForm: null,
+          authForm: null,
+          profileForm: null,
+          searchForm: null,
+          auth: 'При авторизации произошла ошибка. Токен не передан или передан не в том формате',
+        });
+      });
+  }, []);
+
+  useEffect(() => {
+    setMessages({
+      regForm: null,
+      authForm: null,
+      profileForm: null,
+      searchForm: null,
+      auth: null,
+    });
   }, []);
 
   const findMovies = (name) => {
@@ -65,16 +90,26 @@ function App() {
       .then((data) => {
         const movies = data.filter((c) => c.nameRU.toLowerCase().includes(name.toLowerCase()));
         if (movies.length === 0) {
-          setMessage('Ничего не найдено');
+          setMessages({
+            regForm: null,
+            authForm: null,
+            profileForm: null,
+            searchForm: 'Ничего не найдено',
+            auth: null,
+          });
         } else {
-          setMessage('');
           setMoviesCards(movies);
           localStorage.setItem('movies', JSON.stringify(movies));
         }
       })
-      .catch((err) => {
-        console.log('Ошибка при поиске фильма', err.message);
-        setMessage('Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз');
+      .catch(() => {
+        setMessages({
+          regForm: null,
+          authForm: null,
+          profileForm: null,
+          searchForm: 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз',
+          auth: null,
+        });
       })
       .finally(() => setIsLoading(false));
   };
@@ -103,19 +138,112 @@ function App() {
       });
   };
 
-  const handleRegister = ({ name, password, email }) => {
+  const handleLogin = ({ password, email }) => {
     setIsFormSending(true);
     auth
-      .register(name, password, email)
+      .authorize(password, email)
       .then((user) => {
         setCurrentUser(user);
-        console.log('Регистрация прошла успешно', user);
+        setLoggedIn(true);
+        console.log('Успешный вход в аккаунт', user);
       })
       .then(() => history.push('/movies'))
       .catch((err) => {
         handleError(err);
         if (err) {
-          setMessage('Что-то пошло не так...');
+          setMessages({
+            regForm: null,
+            authForm: 'Вы ввели неправильный логин или пароль',
+            profileForm: null,
+            searchForm: null,
+            auth: null,
+          });
+        }
+      })
+      .finally(() => setIsFormSending(false));
+  };
+
+  const handleRegister = ({ name, password, email }) => {
+    setIsFormSending(true);
+    auth
+      .register(name, password, email)
+      .then((user) => {
+        auth
+          .authorize(password, email)
+          .then((userData) => {
+            setCurrentUser(userData);
+            setLoggedIn(true);
+            console.log('Регистрация прошла успешно', user);
+          });
+      })
+      .catch((err) => {
+        handleError(err);
+        if (err) {
+          // console.log(err.message);
+          // тут должна быть проверка на 409 код
+          setMessages({
+            regForm: 'Пользователь с таким email уже существует',
+            authForm: null,
+            profileForm: null,
+            searchForm: null,
+            auth: null,
+          });
+        } else {
+          setMessages({
+            regForm: 'При регистрации пользователя произошла ошибка',
+            authForm: null,
+            profileForm: null,
+            searchForm: null,
+            auth: null,
+          });
+        }
+      })
+      .finally(() => setIsFormSending(false));
+  };
+
+  const handleLogout = () => {
+    auth
+      .logout()
+      .then(() => {
+        history.push('/signin');
+        setLoggedIn(false);
+        setCurrentUser({
+          name: '',
+          email: '',
+        });
+      })
+      .catch((err) => {
+        handleError(err);
+      });
+  };
+
+  const handleUpdateUser = () => {
+    setIsFormSending(true);
+    MainApi
+      .setUserInfo()
+      .then((user) => {
+        setCurrentUser(user);
+      })
+      .catch((err) => {
+        // console.log(err.message);
+        // тут должна быть проверка на 409 код
+        if (err) {
+          setMessages({
+            regForm: null,
+            authForm: null,
+            profileForm: 'Пользователь с таким email уже существует',
+            searchForm: null,
+            auth: null,
+          });
+        } else {
+          console.log(err.message);
+          setMessages({
+            regForm: null,
+            authForm: null,
+            profileForm: 'При обновлении профиля произошла ошибка',
+            searchForm: null,
+            auth: null,
+          });
         }
       })
       .finally(() => setIsFormSending(false));
@@ -125,41 +253,59 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
         <Switch>
-          <Route path="/movies">
-            <Movies
-              isLoading={isLoading}
-              findMovies={findMovies}
-              moviesCards={moviesCards}
-              message={message}
-              windowWidth={windowWidth}
-              onCardLike={handleLike}
-              onCardDelete={handleDelete}
-              isMovieSaved={isMovieSaved}
-            />
-          </Route>
-          <Route path="/saved-movies">
-            <SavedMovies
-              isLoading={false}
-            />
-          </Route>
+          <ProtectedRoute
+            path="/movies"
+            loggedIn={loggedIn}
+            component={Movies}
+            isLoading={isLoading}
+            findMovies={findMovies}
+            moviesCards={moviesCards}
+            messages={messages}
+            onCardLike={handleLike}
+            onCardDelete={handleDelete}
+            isMovieSaved={isMovieSaved}
+          />
+          <ProtectedRoute
+            path="/saved-movies"
+            loggedIn={loggedIn}
+            component={SavedMovies}
+            isLoading={isLoading}
+            findMovies={findMovies}
+            moviesCards={moviesCards}
+            messages={messages}
+            onCardDelete={handleDelete}
+            isMovieSaved={isMovieSaved}
+          />
           <Route path="/signup">
+            {loggedIn && <Redirect to="/" />}
             <Register
               handleRegister={handleRegister}
               isSending={isFormSending}
-              message={message}
+              messages={messages}
             />
           </Route>
           <Route path="/signin">
-            <Login />
+            {loggedIn && <Redirect to="/" />}
+            <Login
+              handleLogin={handleLogin}
+              isSending={isFormSending}
+              messages={messages}
+            />
           </Route>
-          <Route path="/profile">
-            <Profile />
-          </Route>
+          <ProtectedRoute
+            path="/profile"
+            loggedIn={loggedIn}
+            component={Profile}
+            handleLogout={handleLogout}
+            onUpdateUser={handleUpdateUser}
+            isSending={isFormSending}
+            messages={messages}
+          />
           <Route path="/404">
             <Error />
           </Route>
           <Route path="/">
-            <Main />
+            <Main loggedIn={loggedIn} />
           </Route>
         </Switch>
       </div>

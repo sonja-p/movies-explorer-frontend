@@ -5,7 +5,7 @@ import './Register.css';
 import logo from '../../images/header-logo.svg';
 import { useFormWithValidation } from '../../hooks/useForm';
 
-function Register({ handleRegister, isSending, message }) {
+function Register({ handleRegister, isSending, messages }) {
   const {
     values,
     handleChange,
@@ -74,7 +74,7 @@ function Register({ handleRegister, isSending, message }) {
         />
         <span className="register__input-error" id="password-error">{errors.password}</span>
 
-        {message && <span className="register__input-error" id="message">{message}</span>}
+        <span className="register__input-error" id="messages">{messages.regForm}</span>
 
         <button
           type="submit"
@@ -98,7 +98,12 @@ function Register({ handleRegister, isSending, message }) {
 Register.propTypes = {
   handleRegister: PropTypes.func.isRequired,
   isSending: PropTypes.bool.isRequired,
-  message: PropTypes.string.isRequired,
+  messages: PropTypes.shape({
+    regForm: PropTypes.string,
+    authForm: PropTypes.string,
+    profileForm: PropTypes.string,
+    searchForm: PropTypes.string,
+  }).isRequired,
 };
 
 export default Register;

@@ -8,18 +8,17 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
 
 function Movies({
-  isLoading, findMovies, moviesCards, message, windowWidth, onCardLike, onCardDelete, isMovieSaved,
+  loggedIn, isLoading, findMovies, moviesCards, messages, onCardLike, onCardDelete, isMovieSaved,
 }) {
   return (
     <div className="movies">
-      <Header />
+      <Header loggedIn={loggedIn} />
       <SearchForm findMovies={findMovies} isLoading={isLoading} />
       <FilterCheckbox isChecked />
       <MoviesCardList
         isLoading={isLoading}
         moviesCards={moviesCards}
-        message={message}
-        windowWidth={windowWidth}
+        messages={messages}
         onCardLike={onCardLike}
         onCardDelete={onCardDelete}
         isMovieSaved={isMovieSaved}
@@ -31,10 +30,16 @@ function Movies({
 
 Movies.propTypes = {
   isLoading: PropTypes.bool.isRequired,
+  loggedIn: PropTypes.bool.isRequired,
   findMovies: PropTypes.func.isRequired,
   moviesCards: PropTypes.arrayOf(PropTypes.object).isRequired,
-  message: PropTypes.string.isRequired,
-  windowWidth: PropTypes.number.isRequired,
+  messages: PropTypes.shape({
+    regForm: PropTypes.string,
+    authForm: PropTypes.string,
+    profileForm: PropTypes.string,
+    searchForm: PropTypes.string,
+    auth: PropTypes.string,
+  }).isRequired,
   onCardLike: PropTypes.func.isRequired,
   onCardDelete: PropTypes.func.isRequired,
   isMovieSaved: PropTypes.bool.isRequired,

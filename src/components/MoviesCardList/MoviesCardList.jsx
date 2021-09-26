@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import './MoviesCardList.css';
 import Preloader from '../Preloader/Preloader';
+import throttle from '../../utils/throttle';
 
 // Если карточек больше трёх, под ними появляется кнопка «Ещё».
 // По нажатию отрисовываются ещё три, а кнопка сдвигается ниже,
@@ -12,9 +13,21 @@ import Preloader from '../Preloader/Preloader';
 // Ширина от 320px до 480px — 5 карточек по 1 в ряд. Кнопка «Ещё» загружает по 2 карточки.
 
 function MoviesCardList({
-  isLoading, moviesCards, message, windowWidth, onCardLike, onCardDelete, isMovieSaved,
+  isLoading, moviesCards, messages, onCardLike, onCardDelete, isMovieSaved,
 }) {
   const [cardsCount, setCardsCount] = useState(0);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const callback = throttle(() => {
+      setWindowWidth(window.innerWidth);
+    }, 1000);
+
+    window.addEventListener('resize', callback);
+    return () => {
+      window.removeEventListener('resize', callback);
+    };
+  }, []);
 
   const handleClick = () => {
     if (windowWidth > 1020) {
@@ -41,8 +54,8 @@ function MoviesCardList({
       { isLoading ? <Preloader />
         : (
           <>
-            { message ? (
-              <span className="movies-cardlist__message">{message}</span>) : (
+            { messages.searchForm ? (
+              <span className="movies-cardlist__message">{messages.searchForm}</span>) : (
                 <>
                   <ul className="movies-cardlist__list">
                     {
@@ -79,11 +92,20 @@ function MoviesCardList({
 MoviesCardList.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   moviesCards: PropTypes.arrayOf(PropTypes.object).isRequired,
-  message: PropTypes.string.isRequired,
-  windowWidth: PropTypes.number.isRequired,
-  onCardLike: PropTypes.func.isRequired,
+  messages: PropTypes.shape({
+    regForm: PropTypes.string,
+    authForm: PropTypes.string,
+    profileForm: PropTypes.string,
+    searchForm: PropTypes.string,
+    auth: PropTypes.string,
+  }).isRequired,
+  onCardLike: PropTypes.func,
   onCardDelete: PropTypes.func.isRequired,
   isMovieSaved: PropTypes.bool.isRequired,
+};
+
+MoviesCardList.defaultProps = {
+  onCardLike: undefined,
 };
 
 export default MoviesCardList;
