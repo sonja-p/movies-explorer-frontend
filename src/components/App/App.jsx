@@ -14,7 +14,7 @@ import SavedMovies from '../SavedMovies/SavedMovies';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
 import Profile from '../Profile/Profile';
-import Error from '../Error/Error';
+import NotFound from '../NotFound/NotFound';
 import MoviesApi from '../../utils/MoviesApi';
 import MainApi from '../../utils/MainApi';
 import auth from '../../utils/auth';
@@ -62,6 +62,7 @@ function App() {
         history.push(location.pathname);
       })
       .catch((err) => {
+        setLoggedIn(false);
         console.log(err.message);
         setMessages({
           regForm: null,
@@ -211,6 +212,8 @@ function App() {
           name: '',
           email: '',
         });
+        localStorage.removeItem('movies');
+        setMoviesCards([]);
       })
       .catch((err) => {
         handleError(err);
@@ -254,6 +257,7 @@ function App() {
       <div className="App">
         <Switch>
           <ProtectedRoute
+            exact
             path="/movies"
             loggedIn={loggedIn}
             component={Movies}
@@ -266,6 +270,7 @@ function App() {
             isMovieSaved={isMovieSaved}
           />
           <ProtectedRoute
+            exact
             path="/saved-movies"
             loggedIn={loggedIn}
             component={SavedMovies}
@@ -276,7 +281,7 @@ function App() {
             onCardDelete={handleDelete}
             isMovieSaved={isMovieSaved}
           />
-          <Route path="/signup">
+          <Route exact path="/signup">
             {loggedIn && <Redirect to="/" />}
             <Register
               handleRegister={handleRegister}
@@ -284,7 +289,7 @@ function App() {
               messages={messages}
             />
           </Route>
-          <Route path="/signin">
+          <Route exact path="/signin">
             {loggedIn && <Redirect to="/" />}
             <Login
               handleLogin={handleLogin}
@@ -293,6 +298,7 @@ function App() {
             />
           </Route>
           <ProtectedRoute
+            exact
             path="/profile"
             loggedIn={loggedIn}
             component={Profile}
@@ -301,11 +307,11 @@ function App() {
             isSending={isFormSending}
             messages={messages}
           />
-          <Route path="/404">
-            <Error />
-          </Route>
-          <Route path="/">
+          <Route exact path="/">
             <Main loggedIn={loggedIn} />
+          </Route>
+          <Route path="/*">
+            <NotFound />
           </Route>
         </Switch>
       </div>
