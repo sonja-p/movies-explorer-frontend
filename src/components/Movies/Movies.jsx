@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Movies.css';
 import PropTypes from 'prop-types';
 import Header from '../Header/Header';
@@ -11,21 +11,31 @@ import MoviesCard from '../MoviesCard/MoviesCard';
 function Movies({
   loggedIn, isLoading, findMovies, movies, messages, onCardLike, onCardDelete, isMovieSaved,
 }) {
+  const [filtered, setFiltered] = useState(false);
+  const SHORT_MOVIE_DURATION = 40;
+
+  const data = !filtered ? movies : movies.filter(
+    (movie) => movie.duration <= SHORT_MOVIE_DURATION,
+  );
+
   return (
     <div className="movies">
       <Header loggedIn={loggedIn} />
       <SearchForm findMovies={findMovies} isLoading={isLoading} />
-      <FilterCheckbox isChecked />
+      <FilterCheckbox
+        filtered={filtered}
+        handleCheck={(value) => setFiltered(value)}
+      />
       <MoviesCardList
         isLoading={isLoading}
-        moviesCards={movies}
+        moviesCards={data}
         messages={messages}
         onCardLike={onCardLike}
         onCardDelete={onCardDelete}
         isMovieSaved={isMovieSaved}
       >
         {
-          movies.map((card) => (
+          data.map((card) => (
             <MoviesCard
               key={card.id}
               // eslint-disable-next-line react/jsx-props-no-spreading

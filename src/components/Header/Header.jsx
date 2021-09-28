@@ -9,7 +9,6 @@ function Header({ loggedIn }) {
   const isMain = useRouteMatch({ path: '/', exact: true });
 
   return (
-    // {loggedIn ? () : ()}
     <>
       { isMain && !loggedIn ? (
         <div className="header__wrapper header__wrapper_page_landing">
@@ -24,7 +23,7 @@ function Header({ loggedIn }) {
           </header>
         </div>
       ) : (
-        <div className="header__wrapper header__wrapper_page_main">
+        <div className={`header__wrapper ${isMain ? 'header__wrapper_page_landing' : 'header__wrapper_page_main'}`}>
           <header className="header">
             <Link to="." className="header__link">
               <img src={logo} alt="Логотип" className="header__logo" />

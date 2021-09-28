@@ -257,12 +257,20 @@ function App() {
       });
   };
 
-  const handleUpdateUser = () => {
+  const handleUpdateUser = (name, email) => {
     setIsFormSending(true);
     MainApi
-      .setUserInfo()
+      .setUserInfo(name, email)
       .then((user) => {
         setCurrentUser(user);
+        console.log(user);
+        setMessages({
+          regForm: null,
+          authForm: null,
+          profileForm: 'Данные пользователья обновлены успешно',
+          searchForm: null,
+          auth: null,
+        });
       })
       .catch((err) => {
         // console.log(err.message);

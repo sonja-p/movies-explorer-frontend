@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-// import MoviesCard from '../MoviesCard/MoviesCard';
 import './MoviesCardList.css';
 import Preloader from '../Preloader/Preloader';
 import throttle from '../../utils/throttle';

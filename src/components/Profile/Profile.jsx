@@ -71,6 +71,7 @@ function Profile({
           type="submit"
           className={`profile__button
           ${!isValid && 'login__button_disabled'}
+          ${values.email === currentUser.email && values.name === currentUser.name && 'login__button_disabled'}
           ${isSending && 'login__button_disabled'}`}
         >
           Редактировать

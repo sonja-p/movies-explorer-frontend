@@ -33,12 +33,12 @@ class Api {
 
   // # обновляет информацию о пользователе (email и имя)
   // PATCH /users/me
-  setUserInfo(data) {
+  setUserInfo(name, email) {
     return fetch(`${this._url}/users/me`, {
       method: 'PATCH',
       credentials: 'include',
       headers: this._headers,
-      body: JSON.stringify(data),
+      body: JSON.stringify(name, email),
     })
       .then((res) => this._parseResponse(res));
   }
