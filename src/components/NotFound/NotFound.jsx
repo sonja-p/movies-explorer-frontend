@@ -1,15 +1,16 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import './NotFound.css';
 
-function NotFound() {
+function NotFound({ loggedIn }) {
   const history = useHistory();
 
   const handleClick = () => {
-    if (history.length < 2) {
-      history.push('/');
-    } else {
+    if (loggedIn && history.length > 2) {
       history.go(-1);
+    } else {
+      history.push('/');
     }
   };
 
@@ -21,5 +22,9 @@ function NotFound() {
     </div>
   );
 }
+
+NotFound.propTypes = {
+  loggedIn: PropTypes.bool.isRequired,
+};
 
 export default NotFound;

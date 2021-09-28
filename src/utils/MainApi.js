@@ -23,6 +23,14 @@ class Api {
       .then((res) => this._parseResponse(res));
   }
 
+  getSavedMovies() {
+    return fetch(`${this._url}/movies`, {
+      headers: this._headers,
+      credentials: 'include',
+    })
+      .then((res) => this._parseResponse(res));
+  }
+
   // # обновляет информацию о пользователе (email и имя)
   // PATCH /users/me
   setUserInfo(data) {
@@ -35,18 +43,41 @@ class Api {
       .then((res) => this._parseResponse(res));
   }
 
-  saveMovie() {
-    // Вместо cardId в URL нужно подставить свойство _id соответствующей карточки.
+  saveMovie({
+    id,
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailerLink,
+    nameRU,
+    nameEN,
+  }) {
     return fetch(`${this._url}/movies`, {
+      method: 'POST',
       headers: this._headers,
-      method: 'PUT',
       credentials: 'include',
+      body: JSON.stringify({
+        country,
+        director,
+        duration,
+        year,
+        description,
+        image: image.url,
+        trailer: trailerLink,
+        thumbnail: image.formats.thumbnail.url,
+        nameRU,
+        nameEN,
+        movieId: id,
+      }),
     })
       .then((res) => this._parseResponse(res));
   }
 
-  deleteMovie() {
-    return fetch(`${this._url}/movies`, {
+  deleteMovie(card) {
+    return fetch(`${this._url}/movies/${card._id}`, {
       headers: this._headers,
       method: 'DELETE',
       credentials: 'include',

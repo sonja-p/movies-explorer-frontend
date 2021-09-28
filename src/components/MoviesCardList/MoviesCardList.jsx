@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import MoviesCard from '../MoviesCard/MoviesCard';
+// import MoviesCard from '../MoviesCard/MoviesCard';
 import './MoviesCardList.css';
 import Preloader from '../Preloader/Preloader';
 import throttle from '../../utils/throttle';
@@ -13,7 +13,7 @@ import throttle from '../../utils/throttle';
 // Ширина от 320px до 480px — 5 карточек по 1 в ряд. Кнопка «Ещё» загружает по 2 карточки.
 
 function MoviesCardList({
-  isLoading, moviesCards, messages, onCardLike, onCardDelete, isMovieSaved,
+  isLoading, moviesCards, messages, children,
 }) {
   const [cardsCount, setCardsCount] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -58,19 +58,7 @@ function MoviesCardList({
               <span className="movies-cardlist__message">{messages.searchForm}</span>) : (
                 <>
                   <ul className="movies-cardlist__list">
-                    {
-                      moviesCards.slice(0, cardsCount).map((card) => (
-                        <MoviesCard
-                          key={card.id}
-                          // eslint-disable-next-line react/jsx-props-no-spreading
-                          {...card}
-                          // onCardClick={onCardClick}
-                          onCardLike={onCardLike}
-                          onCardDelete={onCardDelete}
-                          isMovieSaved={isMovieSaved}
-                        />
-                      ))
-                    }
+                    {children.slice(0, cardsCount)}
                   </ul>
                   { moviesCards.length > 3 && moviesCards.length > cardsCount && (
                   <button
@@ -99,13 +87,13 @@ MoviesCardList.propTypes = {
     searchForm: PropTypes.string,
     auth: PropTypes.string,
   }).isRequired,
-  onCardLike: PropTypes.func,
-  onCardDelete: PropTypes.func.isRequired,
-  isMovieSaved: PropTypes.bool.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  children: PropTypes.array,
+  // isMovieSaved: PropTypes.bool.isRequired,
 };
 
 MoviesCardList.defaultProps = {
-  onCardLike: undefined,
+  children: undefined,
 };
 
 export default MoviesCardList;

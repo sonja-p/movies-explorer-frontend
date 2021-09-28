@@ -6,9 +6,10 @@ import SearchForm from '../SearchForm/SearchForm';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
+import MoviesCard from '../MoviesCard/MoviesCard';
 
 function Movies({
-  loggedIn, isLoading, findMovies, moviesCards, messages, onCardLike, onCardDelete, isMovieSaved,
+  loggedIn, isLoading, findMovies, movies, messages, onCardLike, onCardDelete, isMovieSaved,
 }) {
   return (
     <div className="movies">
@@ -17,12 +18,26 @@ function Movies({
       <FilterCheckbox isChecked />
       <MoviesCardList
         isLoading={isLoading}
-        moviesCards={moviesCards}
+        moviesCards={movies}
         messages={messages}
         onCardLike={onCardLike}
         onCardDelete={onCardDelete}
         isMovieSaved={isMovieSaved}
-      />
+      >
+        {
+          movies.map((card) => (
+            <MoviesCard
+              key={card.id}
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              {...card}
+              // onCardClick={onCardClick}
+              onCardLike={onCardLike}
+              onCardDelete={onCardDelete}
+              isMovieSaved={isMovieSaved}
+            />
+          ))
+        }
+      </MoviesCardList>
       <Footer />
     </div>
   );
@@ -32,7 +47,7 @@ Movies.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   loggedIn: PropTypes.bool.isRequired,
   findMovies: PropTypes.func.isRequired,
-  moviesCards: PropTypes.arrayOf(PropTypes.object).isRequired,
+  movies: PropTypes.arrayOf(PropTypes.object).isRequired,
   messages: PropTypes.shape({
     regForm: PropTypes.string,
     authForm: PropTypes.string,

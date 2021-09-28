@@ -34,10 +34,11 @@ function App() {
     searchForm: null,
     auth: null,
   });
-  const [moviesCards, setMoviesCards] = useState([]);
+  const [movies, setMovies] = useState([]);
   const [isMovieSaved, setIsMovieSaved] = useState(false);
   const [isFormSending, setIsFormSending] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [savedMovies, setSavedMovies] = useState([]);
 
   const history = useHistory();
   const location = useLocation();
@@ -49,9 +50,21 @@ function App() {
   useEffect(() => {
     const localMovies = JSON.parse(localStorage.getItem('movies'));
     if (localMovies !== null) {
-      setMoviesCards(localMovies);
+      setMovies(localMovies);
     }
   }, []);
+
+  useEffect(() => {
+    MainApi
+      .getSavedMovies()
+      .then((usersMovies) => {
+        setSavedMovies(usersMovies);
+        localStorage.setItem('savedMovies', JSON.stringify(usersMovies));
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  }, [loggedIn]);
 
   useEffect(() => {
     MainApi
@@ -84,13 +97,14 @@ function App() {
     });
   }, []);
 
+  // функция поиска по фильмам
   const findMovies = (name) => {
     setIsLoading(true);
     MoviesApi
       .getMovies()
       .then((data) => {
-        const movies = data.filter((c) => c.nameRU.toLowerCase().includes(name.toLowerCase()));
-        if (movies.length === 0) {
+        const foundMovies = data.filter((c) => c.nameRU.toLowerCase().includes(name.toLowerCase()));
+        if (foundMovies.length === 0) {
           setMessages({
             regForm: null,
             authForm: null,
@@ -99,8 +113,8 @@ function App() {
             auth: null,
           });
         } else {
-          setMoviesCards(movies);
-          localStorage.setItem('movies', JSON.stringify(movies));
+          setMovies(foundMovies);
+          localStorage.setItem('movies', JSON.stringify(foundMovies));
         }
       })
       .catch(() => {
@@ -115,11 +129,32 @@ function App() {
       .finally(() => setIsLoading(false));
   };
 
-  const handleLike = () => {
+  // функция поиска по сохраненным в localStorage фильмам
+  const findSavedMovies = (name) => {
+    const localSavedMovies = JSON.parse(localStorage.getItem('savedMovies'));
+    const foundSavedMovies = localSavedMovies.filter(
+      (c) => c.nameRU.toLowerCase().includes(name.toLowerCase()),
+    );
+    if (foundSavedMovies.length === 0) {
+      setMessages({
+        regForm: null,
+        authForm: null,
+        profileForm: null,
+        searchForm: 'Ничего не найдено',
+        auth: null,
+      });
+    } else {
+      setSavedMovies(foundSavedMovies);
+    }
+  };
+
+  // функция сохранения фильма(лайка)
+  const handleLike = (movie) => {
     MainApi
-      .saveMovie()
-      .then((data) => {
-        console.log(data);
+      .saveMovie(movie)
+      .then((savedMovie) => {
+        setSavedMovies([...savedMovies, savedMovie]);
+        localStorage.setItem('savedMovies', JSON.stringify([savedMovie, ...savedMovies]));
         setIsMovieSaved(true);
       })
       .catch((err) => {
@@ -127,11 +162,12 @@ function App() {
       });
   };
 
-  const handleDelete = () => {
+  // функция удаления фильма
+  const handleDelete = (movie) => {
     MainApi
-      .deleteMovie()
-      .then((data) => {
-        console.log(data);
+      .deleteMovie(movie)
+      .then(() => {
+        setSavedMovies((state) => state.filter((c) => c._id !== movie._id));
         setIsMovieSaved(false);
       })
       .catch((err) => {
@@ -146,7 +182,7 @@ function App() {
       .then((user) => {
         setCurrentUser(user);
         setLoggedIn(true);
-        console.log('Успешный вход в аккаунт', user);
+        console.log('Успешный вход в аккаунт');
       })
       .then(() => history.push('/movies'))
       .catch((err) => {
@@ -168,13 +204,13 @@ function App() {
     setIsFormSending(true);
     auth
       .register(name, password, email)
-      .then((user) => {
+      .then(() => {
         auth
           .authorize(password, email)
           .then((userData) => {
             setCurrentUser(userData);
             setLoggedIn(true);
-            console.log('Регистрация прошла успешно', user);
+            console.log('Регистрация прошла успешно');
           });
       })
       .catch((err) => {
@@ -213,7 +249,8 @@ function App() {
           email: '',
         });
         localStorage.removeItem('movies');
-        setMoviesCards([]);
+        localStorage.removeItem('savedMovies');
+        setMovies([]);
       })
       .catch((err) => {
         handleError(err);
@@ -263,7 +300,7 @@ function App() {
             component={Movies}
             isLoading={isLoading}
             findMovies={findMovies}
-            moviesCards={moviesCards}
+            movies={movies}
             messages={messages}
             onCardLike={handleLike}
             onCardDelete={handleDelete}
@@ -275,8 +312,8 @@ function App() {
             loggedIn={loggedIn}
             component={SavedMovies}
             isLoading={isLoading}
-            findMovies={findMovies}
-            moviesCards={moviesCards}
+            findMovies={findSavedMovies}
+            movies={savedMovies}
             messages={messages}
             onCardDelete={handleDelete}
             isMovieSaved={isMovieSaved}
@@ -311,7 +348,7 @@ function App() {
             <Main loggedIn={loggedIn} />
           </Route>
           <Route path="/*">
-            <NotFound />
+            <NotFound loggedIn={loggedIn} />
           </Route>
         </Switch>
       </div>
