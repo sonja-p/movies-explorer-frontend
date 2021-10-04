@@ -40,6 +40,7 @@ function SearchForm({ findMovies, isLoading }) {
           value={values.movie || ''}
           maxLength="100"
           placeholder="Фильм"
+          disabled={isLoading}
         />
 
         <span className="search-form__input-error" id="movie-error">{error}</span>

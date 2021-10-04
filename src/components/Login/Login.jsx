@@ -46,6 +46,7 @@ function Login({ handleLogin, isSending, messages }) {
           type="email"
           value={values.email || ''}
           required
+          disabled={isSending}
         />
         <span className="login__input-error" id="email-error">{errors.email}</span>
 
@@ -59,6 +60,7 @@ function Login({ handleLogin, isSending, messages }) {
           value={values.password || ''}
           autoComplete="on"
           required
+          disabled={isSending}
         />
         <span className="login__input-error" id="password-error">{errors.password}</span>
 

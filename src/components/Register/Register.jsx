@@ -46,6 +46,7 @@ function Register({ handleRegister, isSending, messages }) {
           minLength="2"
           maxLength="20"
           required
+          disabled={isSending}
         />
         <span className="register__input-error" id="name-error">{errors.name}</span>
 
@@ -58,6 +59,7 @@ function Register({ handleRegister, isSending, messages }) {
           type="email"
           value={values.email || ''}
           required
+          disabled={isSending}
         />
         <span className="register__input-error" id="email-error">{errors.email}</span>
 
@@ -71,6 +73,7 @@ function Register({ handleRegister, isSending, messages }) {
           value={values.password || ''}
           autoComplete="on"
           required
+          disabled={isSending}
         />
         <span className="register__input-error" id="password-error">{errors.password}</span>
 
