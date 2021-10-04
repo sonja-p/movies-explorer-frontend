@@ -10,7 +10,7 @@ class Api {
     if (res.ok) {
       return res.json();
     }
-    return Promise.reject(new Error(`Ошибка: ${res.status}`));
+    return Promise.reject(new Error(res.status));
   }
 
   // # возвращает информацию о пользователе (email и имя)

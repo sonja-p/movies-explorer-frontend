@@ -46,6 +46,16 @@ function App() {
     console.error(error);
   };
 
+  const resetMessages = () => {
+    setMessages({
+      regForm: null,
+      authForm: null,
+      profileForm: null,
+      searchForm: null,
+      auth: null,
+    });
+  };
+
   useEffect(() => {
     const localMovies = JSON.parse(localStorage.getItem('movies'));
     if (localMovies !== null) {
@@ -93,13 +103,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    setMessages({
-      regForm: null,
-      authForm: null,
-      profileForm: null,
-      searchForm: null,
-      auth: null,
-    });
+    resetMessages();
   }, []);
 
   // функция поиска по фильмам
@@ -120,6 +124,7 @@ function App() {
         } else {
           setMovies(foundMovies);
           localStorage.setItem('movies', JSON.stringify(foundMovies));
+          resetMessages();
         }
       })
       .catch(() => {
@@ -150,6 +155,7 @@ function App() {
       });
     } else {
       setSavedMovies(foundSavedMovies);
+      resetMessages();
     }
   };
 
@@ -197,6 +203,11 @@ function App() {
       .deleteMovie(userMovie._id)
       .then(() => {
         setSavedMovies((state) => state.filter((c) => c._id !== userMovie._id));
+        const localSavedMovies = JSON.parse(localStorage.getItem('savedMovies'));
+        const newSavedMovies = localSavedMovies.filter(
+          (c) => c._id !== userMovie._id,
+        );
+        localStorage.setItem('savedMovies', JSON.stringify(newSavedMovies));
       })
       .catch((err) => {
         console.log('Ошибка при удалении фильма', err.message);
@@ -214,7 +225,6 @@ function App() {
       })
       .then(() => history.push('/movies'))
       .catch((err) => {
-        handleError(err);
         if (err) {
           setMessages({
             regForm: null,
@@ -242,10 +252,7 @@ function App() {
           });
       })
       .catch((err) => {
-        handleError(err);
-        if (err) {
-          // console.log(err.message);
-          // тут должна быть проверка на 409 код
+        if (err.message === '409') {
           setMessages({
             regForm: 'Пользователь с таким email уже существует',
             authForm: null,
@@ -301,9 +308,7 @@ function App() {
         });
       })
       .catch((err) => {
-        // console.log(err.message);
-        // тут должна быть проверка на 409 код
-        if (err) {
+        if (err.message === '409') {
           setMessages({
             regForm: null,
             authForm: null,
@@ -312,7 +317,6 @@ function App() {
             auth: null,
           });
         } else {
-          console.log(err.message);
           setMessages({
             regForm: null,
             authForm: null,

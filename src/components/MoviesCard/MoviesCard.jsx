@@ -1,11 +1,10 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import './MoviesCard.css';
+import reqOptions from '../../utils/constants';
 
 function MoviesCard(props) {
-  const url = 'https://api.nomoreparties.co';
   const {
     id,
     country,
@@ -15,6 +14,7 @@ function MoviesCard(props) {
     description,
     image,
     trailerLink,
+    trailer,
     nameRU,
     nameEN,
     onCardLike,
@@ -24,6 +24,7 @@ function MoviesCard(props) {
 
   const isSavedMovies = useRouteMatch({ path: '/saved-movies', exact: true });
   const isMovies = useRouteMatch({ path: '/movies', exact: true });
+  const { url } = reqOptions;
 
   function handleLikeClick() {
     onCardLike({
@@ -65,17 +66,21 @@ function MoviesCard(props) {
         </span>
       </div>
       {isMovies ? (
-        <img
-          src={`${url}${image.url}`}
-          alt="Обложка фильма"
-          className="movies-card__image"
-        />
+        <a href={trailerLink} target="_blank" rel="noreferrer" className="header__link">
+          <img
+            src={`${url}${image.url}`}
+            alt={`Обложка фильма "${nameRU}"`}
+            className="movies-card__image"
+          />
+        </a>
       ) : (
-        <img
-          src={`${url}${image}`}
-          alt="Обложка фильма"
-          className="movies-card__image"
-        />
+        <a href={trailer} target="_blank" rel="noreferrer" className="header__link">
+          <img
+            src={`${url}${image}`}
+            alt={`Обложка фильма "${nameRU}"`}
+            className="movies-card__image"
+          />
+        </a>
       )}
       {isMovies && isLiked && (
         <button
@@ -107,10 +112,17 @@ function MoviesCard(props) {
 }
 
 MoviesCard.propTypes = {
+  id: PropTypes.number,
+  country: PropTypes.string,
+  director: PropTypes.string.isRequired,
+  year: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
   nameRU: PropTypes.string.isRequired,
+  nameEN: PropTypes.string,
   // eslint-disable-next-line react/forbid-prop-types
   image: PropTypes.any.isRequired,
-  // trailer: PropTypes.string.isRequired,
+  trailerLink: PropTypes.string,
+  trailer: PropTypes.string,
   duration: PropTypes.number.isRequired,
   onCardLike: PropTypes.func,
   onCardDelete: PropTypes.func.isRequired,
@@ -118,8 +130,13 @@ MoviesCard.propTypes = {
 };
 
 MoviesCard.defaultProps = {
+  id: undefined,
   onCardLike: undefined,
   isLiked: undefined,
+  trailer: undefined,
+  trailerLink: undefined,
+  country: undefined,
+  nameEN: undefined,
 };
 
 export default MoviesCard;

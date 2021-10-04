@@ -8,7 +8,7 @@ class Auth {
 
   _checkResponse = (response) => (response.ok
     ? response.json()
-    : Promise.reject(new Error(`Ошибка: ${response.status}`)));
+    : Promise.reject(new Error(response.status)));
 
   register = (name, password, email) => fetch(`${this._url}/signup`, {
     headers: this._headers,
