@@ -9,7 +9,7 @@ import Footer from '../Footer/Footer';
 import MoviesCard from '../MoviesCard/MoviesCard';
 
 function SavedMovies({
-  isLoading, loggedIn, findMovies, movies, messages, onCardDelete, isMovieSaved,
+  isLoading, loggedIn, findMovies, movies, messages, onCardDelete,
 }) {
   const [filtered, setFiltered] = useState(false);
   const SHORT_MOVIE_DURATION = 40;
@@ -33,19 +33,15 @@ function SavedMovies({
         isLoading={isLoading}
         moviesCards={data}
         messages={messages}
-        onCardDelete={onCardDelete}
-        isMovieSaved={isMovieSaved}
       >
         {
           (data.map((card) => (
             <MoviesCard
-              key={card._id}
+              key={card.movieId}
               // eslint-disable-next-line react/jsx-props-no-spreading
               {...card}
               // onCardClick={onCardClick}
-              // onCardLike={onCardLike}
               onCardDelete={onCardDelete}
-              isMovieSaved={isMovieSaved}
             />
           )).reverse())
         }
@@ -68,7 +64,6 @@ SavedMovies.propTypes = {
     auth: PropTypes.string,
   }).isRequired,
   onCardDelete: PropTypes.func.isRequired,
-  isMovieSaved: PropTypes.bool.isRequired,
 };
 
 export default SavedMovies;

@@ -35,7 +35,6 @@ function App() {
     auth: null,
   });
   const [movies, setMovies] = useState([]);
-  const [isMovieSaved, setIsMovieSaved] = useState(false);
   const [isFormSending, setIsFormSending] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [savedMovies, setSavedMovies] = useState([]);
@@ -52,7 +51,7 @@ function App() {
     if (localMovies !== null) {
       setMovies(localMovies);
     }
-  }, []);
+  }, [loggedIn]);
 
   useEffect(() => {
     MainApi
@@ -75,8 +74,8 @@ function App() {
         history.push(location.pathname);
       })
       .catch((err) => {
-        setLoggedIn(false);
         console.log(err.message);
+        setLoggedIn(false);
         setMessages({
           regForm: null,
           authForm: null,
@@ -84,6 +83,12 @@ function App() {
           searchForm: null,
           auth: 'При авторизации произошла ошибка. Токен не передан или передан не в том формате',
         });
+        setCurrentUser({
+          name: '',
+          email: '',
+        });
+        localStorage.removeItem('movies');
+        localStorage.removeItem('savedMovies');
       });
   }, []);
 
@@ -150,12 +155,34 @@ function App() {
 
   // функция сохранения фильма(лайка)
   const handleLike = (movie) => {
+    // eslint-disable-next-line prefer-destructuring
+    const id = movie.id;
+    const country = movie.country || 'Неизвестно';
+    const director = movie.director || 'Неизвестно';
+    const duration = movie.duration || 'Неизвестно';
+    const year = movie.year || 'Неизвестно';
+    const description = movie.description || 'Неизвестно';
+    const image = movie.image || '/uploads/_.jpeg';
+    const trailerLink = movie.trailerLink || 'https://www.youtube.com/=';
+    const nameRU = movie.nameRU || 'Неизвестно';
+    const nameEN = movie.nameEN || 'Неизвестно';
+
     MainApi
-      .saveMovie(movie)
+      .saveMovie({
+        id,
+        country,
+        director,
+        duration,
+        year,
+        description,
+        image,
+        trailerLink,
+        nameRU,
+        nameEN,
+      })
       .then((savedMovie) => {
         setSavedMovies([...savedMovies, savedMovie]);
         localStorage.setItem('savedMovies', JSON.stringify([savedMovie, ...savedMovies]));
-        setIsMovieSaved(true);
       })
       .catch((err) => {
         console.log('Ошибка при сохранении фильма', err.message);
@@ -164,11 +191,12 @@ function App() {
 
   // функция удаления фильма
   const handleDelete = (movie) => {
+    const movieId = movie.id || movie.movieId;
+    const userMovie = savedMovies.find((i) => i.movieId === movieId);
     MainApi
-      .deleteMovie(movie)
+      .deleteMovie(userMovie._id)
       .then(() => {
-        setSavedMovies((state) => state.filter((c) => c._id !== movie._id));
-        setIsMovieSaved(false);
+        setSavedMovies((state) => state.filter((c) => c._id !== userMovie._id));
       })
       .catch((err) => {
         console.log('Ошибка при удалении фильма', err.message);
@@ -312,7 +340,7 @@ function App() {
             messages={messages}
             onCardLike={handleLike}
             onCardDelete={handleDelete}
-            isMovieSaved={isMovieSaved}
+            likedMovies={savedMovies.map((movie) => movie.movieId)}
           />
           <ProtectedRoute
             exact
@@ -324,7 +352,6 @@ function App() {
             movies={savedMovies}
             messages={messages}
             onCardDelete={handleDelete}
-            isMovieSaved={isMovieSaved}
           />
           <Route exact path="/signup">
             {loggedIn && <Redirect to="/" />}

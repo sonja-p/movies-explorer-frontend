@@ -9,7 +9,7 @@ import Footer from '../Footer/Footer';
 import MoviesCard from '../MoviesCard/MoviesCard';
 
 function Movies({
-  loggedIn, isLoading, findMovies, movies, messages, onCardLike, onCardDelete, isMovieSaved,
+  loggedIn, isLoading, findMovies, movies, messages, onCardLike, onCardDelete, likedMovies,
 }) {
   const [filtered, setFiltered] = useState(false);
   const SHORT_MOVIE_DURATION = 40;
@@ -31,8 +31,6 @@ function Movies({
         moviesCards={data}
         messages={messages}
         onCardLike={onCardLike}
-        onCardDelete={onCardDelete}
-        isMovieSaved={isMovieSaved}
       >
         {
           data.map((card) => (
@@ -42,8 +40,8 @@ function Movies({
               {...card}
               // onCardClick={onCardClick}
               onCardLike={onCardLike}
-              onCardDelete={onCardDelete}
-              isMovieSaved={isMovieSaved}
+              onCardDelete={() => onCardDelete(card)}
+              isLiked={likedMovies.includes(card.id)}
             />
           ))
         }
@@ -67,7 +65,7 @@ Movies.propTypes = {
   }).isRequired,
   onCardLike: PropTypes.func.isRequired,
   onCardDelete: PropTypes.func.isRequired,
-  isMovieSaved: PropTypes.bool.isRequired,
+  likedMovies: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
 export default Movies;

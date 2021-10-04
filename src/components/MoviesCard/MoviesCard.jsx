@@ -19,7 +19,7 @@ function MoviesCard(props) {
     nameEN,
     onCardLike,
     onCardDelete,
-    isMovieSaved,
+    isLiked,
   } = props;
 
   const isSavedMovies = useRouteMatch({ path: '/saved-movies', exact: true });
@@ -40,13 +40,9 @@ function MoviesCard(props) {
     });
   }
 
-  // function handleCardSave() {
-  //   setIsMovieSaved(!isMovieSaved);
-  // }
-
-  function handleCardDelete() {
+  const handleCardDelete = () => {
     onCardDelete(props);
-  }
+  };
 
   function addMinutes(n) {
     let minutes;
@@ -81,7 +77,7 @@ function MoviesCard(props) {
           className="movies-card__image"
         />
       )}
-      {isMovies && isMovieSaved && (
+      {isMovies && isLiked && (
         <button
           className="movies-card__button movies-card__button_type_saved"
           type="button"
@@ -89,7 +85,7 @@ function MoviesCard(props) {
           onClick={onCardDelete}
         />
       )}
-      {isMovies && !isMovieSaved && (
+      {isMovies && !isLiked && (
         <button
           className="movies-card__button"
           type="button"
@@ -118,11 +114,12 @@ MoviesCard.propTypes = {
   duration: PropTypes.number.isRequired,
   onCardLike: PropTypes.func,
   onCardDelete: PropTypes.func.isRequired,
-  isMovieSaved: PropTypes.bool.isRequired,
+  isLiked: PropTypes.bool,
 };
 
 MoviesCard.defaultProps = {
   onCardLike: undefined,
+  isLiked: undefined,
 };
 
 export default MoviesCard;

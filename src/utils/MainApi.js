@@ -76,8 +76,8 @@ class Api {
       .then((res) => this._parseResponse(res));
   }
 
-  deleteMovie(card) {
-    return fetch(`${this._url}/movies/${card._id}`, {
+  deleteMovie(id) {
+    return fetch(`${this._url}/movies/${id}`, {
       headers: this._headers,
       method: 'DELETE',
       credentials: 'include',
