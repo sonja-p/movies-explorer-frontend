@@ -56,6 +56,10 @@
   line-height: 18px;
   color: #a0a0a0;
 }
+.movies-card__link {
+  cursor: pointer;
+  transition: opacity .35s ease;
+}
 
 .movies-card__image {
   width: 100%;

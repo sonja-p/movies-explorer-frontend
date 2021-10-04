@@ -66,7 +66,7 @@ function MoviesCard(props) {
         </span>
       </div>
       {isMovies ? (
-        <a href={trailerLink} target="_blank" rel="noreferrer" className="header__link">
+        <a href={trailerLink} target="_blank" rel="noreferrer" className="movies-card__link">
           <img
             src={`${url}${image.url}`}
             alt={`Обложка фильма "${nameRU}"`}
@@ -74,7 +74,7 @@ function MoviesCard(props) {
           />
         </a>
       ) : (
-        <a href={trailer} target="_blank" rel="noreferrer" className="header__link">
+        <a href={trailer} target="_blank" rel="noreferrer" className="movies-card__link">
           <img
             src={`${url}${image}`}
             alt={`Обложка фильма "${nameRU}"`}
