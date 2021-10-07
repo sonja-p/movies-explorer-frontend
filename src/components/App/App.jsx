@@ -249,7 +249,8 @@ function App() {
             setCurrentUser(userData);
             setLoggedIn(true);
             console.log('Регистрация прошла успешно');
-          });
+          })
+          .then(() => history.push('/movies'));
       })
       .catch((err) => {
         if (err.message === '409') {
