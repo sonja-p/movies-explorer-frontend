@@ -7,8 +7,8 @@ function NotFound({ loggedIn }) {
   const history = useHistory();
 
   const handleClick = () => {
-    if (loggedIn && history.length > 2) {
-      history.go(-1);
+    if (loggedIn && history.length > 4) {
+      history.go(-2);
     } else {
       history.push('/');
     }

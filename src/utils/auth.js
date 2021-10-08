@@ -1,4 +1,4 @@
-import reqOptions from './constants';
+import reqOptions from './options';
 
 class Auth {
   constructor(options) {

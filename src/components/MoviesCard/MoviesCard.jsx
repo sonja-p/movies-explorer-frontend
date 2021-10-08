@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import './MoviesCard.css';
-import reqOptions from '../../utils/constants';
+import { URL } from '../../utils/constants';
 
 function MoviesCard(props) {
   const {
@@ -24,7 +24,7 @@ function MoviesCard(props) {
 
   const isSavedMovies = useRouteMatch({ path: '/saved-movies', exact: true });
   const isMovies = useRouteMatch({ path: '/movies', exact: true });
-  const { url } = reqOptions;
+  // const { url } = reqOptions;
 
   function handleLikeClick() {
     onCardLike({
@@ -68,7 +68,7 @@ function MoviesCard(props) {
       {isMovies ? (
         <a href={trailerLink} target="_blank" rel="noreferrer" className="movies-card__link">
           <img
-            src={`${url}${image.url}`}
+            src={`${URL}${image.url}`}
             alt={`Обложка фильма "${nameRU}"`}
             className="movies-card__image"
           />
@@ -76,7 +76,7 @@ function MoviesCard(props) {
       ) : (
         <a href={trailer} target="_blank" rel="noreferrer" className="movies-card__link">
           <img
-            src={`${url}${image}`}
+            src={`${URL}${image}`}
             alt={`Обложка фильма "${nameRU}"`}
             className="movies-card__image"
           />

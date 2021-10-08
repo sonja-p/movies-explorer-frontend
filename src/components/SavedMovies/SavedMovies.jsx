@@ -7,12 +7,13 @@ import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
 import MoviesCard from '../MoviesCard/MoviesCard';
+import { SHORT_MOVIE_DURATION } from '../../utils/constants';
 
 function SavedMovies({
   isLoading, loggedIn, findMovies, movies, messages, onCardDelete,
 }) {
   const [filtered, setFiltered] = useState(false);
-  const SHORT_MOVIE_DURATION = 40;
+  // const SHORT_MOVIE_DURATION = 40;
 
   const data = !filtered ? movies : movies.filter(
     (movie) => movie.duration <= SHORT_MOVIE_DURATION,

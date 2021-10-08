@@ -3,6 +3,13 @@ import PropTypes from 'prop-types';
 import './MoviesCardList.css';
 import Preloader from '../Preloader/Preloader';
 import throttle from '../../utils/throttle';
+import {
+  CARDS_TO_ADD_FOR_MIN_WW,
+  CARDS_TO_ADD_FOR_MAX_WW,
+  CARDS_COUNT_FOR_MIN_WW,
+  CARDS_COUNT_FOR_MEDIUM_WW,
+  CARDS_COUNT_FOR_MAX_WW,
+} from '../../utils/constants';
 
 // Если карточек больше трёх, под ними появляется кнопка «Ещё».
 // По нажатию отрисовываются ещё три, а кнопка сдвигается ниже,
@@ -30,19 +37,19 @@ function MoviesCardList({
 
   const handleClick = () => {
     if (windowWidth > 1020) {
-      setCardsCount(cardsCount + 3);
+      setCardsCount(cardsCount + CARDS_TO_ADD_FOR_MAX_WW);
     } else {
-      setCardsCount(cardsCount + 2);
+      setCardsCount(cardsCount + CARDS_TO_ADD_FOR_MIN_WW);
     }
   };
 
   const renderCards = () => {
     if (windowWidth > 768) {
-      setCardsCount(12);
+      setCardsCount(CARDS_COUNT_FOR_MAX_WW);
     } else if (windowWidth > 480 && windowWidth <= 768) {
-      setCardsCount(8);
+      setCardsCount(CARDS_COUNT_FOR_MEDIUM_WW);
     } else {
-      setCardsCount(5);
+      setCardsCount(CARDS_COUNT_FOR_MIN_WW);
     }
   };
 
@@ -59,7 +66,7 @@ function MoviesCardList({
                   <ul className="movies-cardlist__list">
                     {children.slice(0, cardsCount)}
                   </ul>
-                  { moviesCards.length > 3 && moviesCards.length > cardsCount && (
+                  { moviesCards.length > cardsCount && (
                   <button
                     className="movies-cardlist__button"
                     type="button"
