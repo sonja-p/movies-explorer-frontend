@@ -39,6 +39,8 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [savedMovies, setSavedMovies] = useState([]);
 
+  const localSavedMovies = JSON.parse(localStorage.getItem('savedMovies'));
+
   const history = useHistory();
   const location = useLocation();
 
@@ -64,15 +66,9 @@ function App() {
   }, [loggedIn]);
 
   useEffect(() => {
-    MainApi
-      .getSavedMovies()
-      .then((usersMovies) => {
-        setSavedMovies(usersMovies);
-        localStorage.setItem('savedMovies', JSON.stringify(usersMovies));
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+    if (localSavedMovies !== null) {
+      setSavedMovies(localSavedMovies);
+    }
   }, [loggedIn]);
 
   useEffect(() => {
@@ -128,7 +124,6 @@ function App() {
 
   // функция поиска по фильмам
   const findMovies = (name) => {
-    // console.log(movies);
     const beatFilmMovies = JSON.parse(localStorage.getItem('beatFilmMovies'));
     if (!beatFilmMovies) {
       getMovies();
@@ -154,7 +149,6 @@ function App() {
 
   // функция поиска по сохраненным в localStorage фильмам
   const findSavedMovies = (name) => {
-    const localSavedMovies = JSON.parse(localStorage.getItem('savedMovies'));
     const foundSavedMovies = localSavedMovies.filter(
       (c) => c.nameRU.toLowerCase().includes(name.toLowerCase()),
     );
@@ -216,7 +210,6 @@ function App() {
       .deleteMovie(userMovie._id)
       .then(() => {
         setSavedMovies((state) => state.filter((c) => c._id !== userMovie._id));
-        const localSavedMovies = JSON.parse(localStorage.getItem('savedMovies'));
         const newSavedMovies = localSavedMovies.filter(
           (c) => c._id !== userMovie._id,
         );
@@ -227,13 +220,27 @@ function App() {
       });
   };
 
+  const handleAuth = (user) => {
+    setCurrentUser(user);
+    setLoggedIn(true);
+    MainApi
+      .getSavedMovies()
+      .then((usersMovies) => {
+        setSavedMovies(usersMovies);
+        localStorage.setItem('savedMovies', JSON.stringify(usersMovies));
+      });
+    // Ошибка обработается в catch в handleLogin и handleRegister, поэтому закомментированно
+    // .catch((err) => {
+    //   console.log(err.message);
+    // });
+  };
+
   const handleLogin = ({ password, email }) => {
     setIsFormSending(true);
     auth
       .authorize(password, email)
       .then((user) => {
-        setCurrentUser(user);
-        setLoggedIn(true);
+        handleAuth(user);
         console.log('Успешный вход в аккаунт');
       })
       .then(() => history.push('/movies'))
@@ -258,9 +265,8 @@ function App() {
       .then(() => {
         auth
           .authorize(password, email)
-          .then((userData) => {
-            setCurrentUser(userData);
-            setLoggedIn(true);
+          .then((user) => {
+            handleAuth(user);
             console.log('Регистрация прошла успешно');
           })
           .then(() => history.push('/movies'));
