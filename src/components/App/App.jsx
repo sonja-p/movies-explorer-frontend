@@ -57,7 +57,7 @@ function App() {
   };
 
   useEffect(() => {
-    const localMovies = JSON.parse(localStorage.getItem('movies'));
+    const localMovies = JSON.parse(localStorage.getItem('foundMovies'));
     if (localMovies !== null) {
       setMovies(localMovies);
     }
@@ -97,7 +97,7 @@ function App() {
           name: '',
           email: '',
         });
-        localStorage.removeItem('movies');
+        localStorage.removeItem('foundMovies');
         localStorage.removeItem('savedMovies');
       });
   }, []);
@@ -106,26 +106,13 @@ function App() {
     resetMessages();
   }, []);
 
-  // функция поиска по фильмам
-  const findMovies = (name) => {
+  // функция получения всех фильмов от beatFilm
+  const getMovies = () => {
     setIsLoading(true);
     MoviesApi
       .getMovies()
       .then((data) => {
-        const foundMovies = data.filter((c) => c.nameRU.toLowerCase().includes(name.toLowerCase()));
-        if (foundMovies.length === 0) {
-          setMessages({
-            regForm: null,
-            authForm: null,
-            profileForm: null,
-            searchForm: 'Ничего не найдено',
-            auth: null,
-          });
-        } else {
-          setMovies(foundMovies);
-          localStorage.setItem('movies', JSON.stringify(foundMovies));
-          resetMessages();
-        }
+        localStorage.setItem('beatFilmMovies', JSON.stringify(data));
       })
       .catch(() => {
         setMessages({
@@ -137,6 +124,32 @@ function App() {
         });
       })
       .finally(() => setIsLoading(false));
+  };
+
+  // функция поиска по фильмам
+  const findMovies = (name) => {
+    // console.log(movies);
+    const beatFilmMovies = JSON.parse(localStorage.getItem('beatFilmMovies'));
+    if (!beatFilmMovies) {
+      getMovies();
+    } else {
+      const foundMovies = beatFilmMovies.filter(
+        (c) => c.nameRU.toLowerCase().includes(name.toLowerCase()),
+      );
+      if (foundMovies.length === 0) {
+        setMessages({
+          regForm: null,
+          authForm: null,
+          profileForm: null,
+          searchForm: 'Ничего не найдено',
+          auth: null,
+        });
+      } else {
+        setMovies(foundMovies);
+        localStorage.setItem('foundMovies', JSON.stringify(foundMovies));
+        resetMessages();
+      }
+    }
   };
 
   // функция поиска по сохраненным в localStorage фильмам
@@ -284,7 +297,7 @@ function App() {
           name: '',
           email: '',
         });
-        localStorage.removeItem('movies');
+        localStorage.removeItem('foundMovies');
         localStorage.removeItem('savedMovies');
         setMovies([]);
       })
