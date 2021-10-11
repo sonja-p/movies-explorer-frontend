@@ -59,15 +59,23 @@ function App() {
   };
 
   useEffect(() => {
-    const localMovies = JSON.parse(localStorage.getItem('foundMovies'));
-    if (localMovies !== null) {
-      setMovies(localMovies);
+    if (loggedIn) {
+      MainApi
+        .getSavedMovies()
+        .then((usersMovies) => {
+          setSavedMovies(usersMovies);
+          localStorage.setItem('savedMovies', JSON.stringify(usersMovies));
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
     }
   }, [loggedIn]);
 
   useEffect(() => {
-    if (localSavedMovies !== null) {
-      setSavedMovies(localSavedMovies);
+    const localMovies = JSON.parse(localStorage.getItem('foundMovies'));
+    if (localMovies !== null && loggedIn) {
+      setMovies(localMovies);
     }
   }, [loggedIn]);
 
@@ -220,27 +228,13 @@ function App() {
       });
   };
 
-  const handleAuth = (user) => {
-    setCurrentUser(user);
-    setLoggedIn(true);
-    MainApi
-      .getSavedMovies()
-      .then((usersMovies) => {
-        setSavedMovies(usersMovies);
-        localStorage.setItem('savedMovies', JSON.stringify(usersMovies));
-      });
-    // Ошибка обработается в catch в handleLogin и handleRegister, поэтому закомментированно
-    // .catch((err) => {
-    //   console.log(err.message);
-    // });
-  };
-
   const handleLogin = ({ password, email }) => {
     setIsFormSending(true);
     auth
       .authorize(password, email)
       .then((user) => {
-        handleAuth(user);
+        setCurrentUser(user);
+        setLoggedIn(true);
         console.log('Успешный вход в аккаунт');
       })
       .then(() => history.push('/movies'))
@@ -266,7 +260,8 @@ function App() {
         auth
           .authorize(password, email)
           .then((user) => {
-            handleAuth(user);
+            setCurrentUser(user);
+            setLoggedIn(true);
             console.log('Регистрация прошла успешно');
           })
           .then(() => history.push('/movies'));
@@ -306,6 +301,7 @@ function App() {
         localStorage.removeItem('foundMovies');
         localStorage.removeItem('savedMovies');
         setMovies([]);
+        setSavedMovies([]);
       })
       .catch((err) => {
         handleError(err);
