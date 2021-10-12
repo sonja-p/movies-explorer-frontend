@@ -24,7 +24,6 @@ function MoviesCard(props) {
 
   const isSavedMovies = useRouteMatch({ path: '/saved-movies', exact: true });
   const isMovies = useRouteMatch({ path: '/movies', exact: true });
-  // const { url } = reqOptions;
 
   function handleLikeClick() {
     onCardLike({
@@ -114,7 +113,7 @@ function MoviesCard(props) {
 MoviesCard.propTypes = {
   id: PropTypes.number,
   country: PropTypes.string,
-  director: PropTypes.string.isRequired,
+  director: PropTypes.string,
   year: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   nameRU: PropTypes.string.isRequired,
@@ -136,6 +135,7 @@ MoviesCard.defaultProps = {
   trailer: undefined,
   trailerLink: undefined,
   country: undefined,
+  director: undefined,
   nameEN: undefined,
 };
 

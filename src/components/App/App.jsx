@@ -110,48 +110,51 @@ function App() {
     resetMessages();
   }, []);
 
-  // функция получения всех фильмов от beatFilm
-  const getMovies = () => {
-    setIsLoading(true);
-    MoviesApi
-      .getMovies()
-      .then((data) => {
-        localStorage.setItem('beatFilmMovies', JSON.stringify(data));
-      })
-      .catch(() => {
-        setMessages({
-          regForm: null,
-          authForm: null,
-          profileForm: null,
-          searchForm: 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз',
-          auth: null,
-        });
-      })
-      .finally(() => setIsLoading(false));
+  const filterMoviesByName = (name) => {
+    const beatFilmMovies = JSON.parse(localStorage.getItem('beatFilmMovies'));
+    const foundMovies = beatFilmMovies.filter(
+      (c) => c.nameRU.toLowerCase().includes(name.toLowerCase()),
+    );
+    if (foundMovies.length === 0) {
+      setMessages({
+        regForm: null,
+        authForm: null,
+        profileForm: null,
+        searchForm: 'Ничего не найдено',
+        auth: null,
+      });
+    } else {
+      setMovies(foundMovies);
+      localStorage.setItem('foundMovies', JSON.stringify(foundMovies));
+      resetMessages();
+    }
   };
 
   // функция поиска по фильмам
   const findMovies = (name) => {
     const beatFilmMovies = JSON.parse(localStorage.getItem('beatFilmMovies'));
     if (!beatFilmMovies) {
-      getMovies();
+      setIsLoading(true);
+      MoviesApi
+        .getMovies()
+        .then((data) => {
+          localStorage.setItem('beatFilmMovies', JSON.stringify(data));
+        })
+        .then(() => {
+          filterMoviesByName(name);
+        })
+        .catch(() => {
+          setMessages({
+            regForm: null,
+            authForm: null,
+            profileForm: null,
+            searchForm: 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз',
+            auth: null,
+          });
+        })
+        .finally(() => setIsLoading(false));
     } else {
-      const foundMovies = beatFilmMovies.filter(
-        (c) => c.nameRU.toLowerCase().includes(name.toLowerCase()),
-      );
-      if (foundMovies.length === 0) {
-        setMessages({
-          regForm: null,
-          authForm: null,
-          profileForm: null,
-          searchForm: 'Ничего не найдено',
-          auth: null,
-        });
-      } else {
-        setMovies(foundMovies);
-        localStorage.setItem('foundMovies', JSON.stringify(foundMovies));
-        resetMessages();
-      }
+      filterMoviesByName(name);
     }
   };
 
