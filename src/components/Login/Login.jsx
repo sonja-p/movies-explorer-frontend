@@ -1,10 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 import './Login.css';
 import { Link } from 'react-router-dom';
 import logo from '../../images/header-logo.svg';
+import { useFormWithValidation } from '../../hooks/useForm';
 
-function Login() {
-  const error = 'Что-то пошло не так...';
+function Login({ handleLogin, isSending, messages }) {
+  const {
+    values,
+    handleChange,
+    resetForm,
+    errors,
+    isValid,
+  } = useFormWithValidation();
+
+  useEffect(() => {
+    resetForm({});
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!values.email || !values.password) {
+      return;
+    }
+    const { password, email } = values;
+    handleLogin({ password, email });
+  };
 
   return (
     <div className="login">
@@ -14,19 +35,20 @@ function Login() {
       <h2 className="login__title">Рады видеть!</h2>
       <form
         className="login__form"
-        onSubmit
+        onSubmit={handleSubmit}
       >
         <span className="login__input-title">E-mail</span>
         <input
           className="login__input"
-          onChange
+          onChange={handleChange}
           id="email"
           name="email"
           type="email"
-          value="pochta@yandex.ru"
+          value={values.email || ''}
           required
+          disabled={isSending}
         />
-        <span className="login__input-error" id="email-error">{error}</span>
+        <span className="login__input-error" id="email-error">{errors.email}</span>
 
         <span className="login__input-title">Пароль</span>
         <input
@@ -34,20 +56,23 @@ function Login() {
           id="password"
           name="password"
           type="password"
-          placeholder="Пароль"
-          onChange
-          value="••••••••••••••"
+          onChange={handleChange}
+          value={values.password || ''}
           autoComplete="on"
           required
+          disabled={isSending}
         />
-        <span className="login__input-error" id="password-error">{error}</span>
+        <span className="login__input-error" id="password-error">{errors.password}</span>
+
+        <span className="login__input-error" id="messages">{messages.authForm}</span>
 
         <button
           type="submit"
-          className="login__button"
-          onClick
+          className={`login__button
+          ${!isValid && 'login__button_disabled'}
+          ${isSending && 'login__button_disabled'}`}
         >
-          Войти
+          {isSending ? 'Вход...' : 'Войти'}
         </button>
         <div className="login__signup">
           <p className="login__link-title">Ещё не зарегистрированы?</p>
@@ -59,5 +84,17 @@ function Login() {
     </div>
   );
 }
+
+Login.propTypes = {
+  handleLogin: PropTypes.func.isRequired,
+  isSending: PropTypes.bool.isRequired,
+  messages: PropTypes.shape({
+    regForm: PropTypes.string,
+    authForm: PropTypes.string,
+    profileForm: PropTypes.string,
+    searchForm: PropTypes.string,
+    auth: PropTypes.string,
+  }).isRequired,
+};
 
 export default Login;

@@ -70,11 +70,6 @@
   margin-top: 5px;
   min-height: 20px;
   pointer-events: none;
-  visibility: hidden;
-}
-
-.login__input-error_visible {
-  visibility: visible;
 }
 
 .login__signup {
@@ -111,7 +106,7 @@
   opacity: 0.8;
 }
 
-.login__button_type_disabled {
+.login__button_disabled {
   background-color: #f8f8f8;
   color: #c2c2c2;
   pointer-events: none;

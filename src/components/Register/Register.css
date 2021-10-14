@@ -70,11 +70,6 @@
   margin-top: 5px;
   min-height: 20px;
   pointer-events: none;
-  visibility: hidden;
-}
-
-.register__input-error_visible {
-  visibility: visible;
 }
 
 .register__signin {
@@ -111,9 +106,9 @@
   opacity: 0.8;
 }
 
-.register__button_type_disabled {
+.register__button_disabled {
   background-color: #f8f8f8;
-  color: #a0a0a0;
+  color: #c2c2c2;
   pointer-events: none;
   -webkit-user-select: none;
      -moz-user-select: none;
