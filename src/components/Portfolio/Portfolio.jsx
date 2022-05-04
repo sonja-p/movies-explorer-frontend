@@ -20,7 +20,7 @@ function Portfolio() {
         </li>
         <li className="portfolio__links-item">
           <p className="portfolio__link-title">Одностраничное приложение</p>
-          <a href="https://puolukka.nomoredomains.rocks" className="portfolio__link" target="_blank" rel="noreferrer">
+          <a href="https://puolukka.nomoredomains.space" className="portfolio__link" target="_blank" rel="noreferrer">
             ↗
           </a>
         </li>

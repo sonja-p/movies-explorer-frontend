@@ -16,11 +16,11 @@
 
 ## Ссылки
 
-* Ссылка на сайт, размещенный на Яндекс.Облаке - <https://movies.explorer.nomoredomains.rocks>
+* Ссылка на сайт, размещенный на Яндекс.Облаке - <https://movies-explorer.nomoredomains.space>
 * Cсылкa на сгенерированный макет в Figma - https://www.figma.com/file/iLj6aZ1QgTON3tCFkxVj32/Diploma-Copy?node-id=891%3A3857
 * BeatFilms API - https://api.nomoreparties.co/beatfilm-movies
-* Доменное имя api - <https://api.movies.explorer.nomoredomains.rocks>
-* Публичный IP-адрес сервера - <http://84.252.139.226/>
+* Доменное имя api - <https://api.movies-explorer.nomoredomains.space>
+* Публичный IP-адрес сервера - <http://51.250.105.145/>
 
 ---
 
